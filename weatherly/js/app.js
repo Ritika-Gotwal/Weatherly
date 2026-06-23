@@ -76,6 +76,13 @@ function initMobileNav() {
     });
   });
 
+  /* Back buttons inside tab views → navigate to home */
+  document.querySelectorAll('.tab-back-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelector('[data-tab="home"]')?.click();
+    });
+  });
+
   /* Save to favorites button */
   const saveBtn = document.getElementById('favSaveBtn');
   if (saveBtn) {
@@ -130,6 +137,7 @@ function switchTab(tab) {
         const cityNameEl = document.getElementById('favSaveCityName');
         if (cityNameEl && state.city) cityNameEl.textContent = state.city.name;
       }
+    }
   }
 }
 

@@ -46,34 +46,45 @@ function getCurrentPosition() {
 }
 
 /**
- * Reverse-geocode coordinates using the Open-Meteo Geocoding API.
- * Finds the nearest city name by searching a small bbox area.
- * Falls back to "lat, lon" string if no result found.
+ * Reverse-geocode coordinates to a human-readable city name.
+ * Primary: BigDataCloud (free, no API key, browser-friendly).
+ * Fallback: Nominatim / OpenStreetMap (free, no API key).
+ * Final fallback: raw coordinate string.
  */
 async function reverseGeocode(lat, lon) {
-  /* Open-Meteo geocoding doesn't support reverse lookup directly.
-     We use a nearby search with generic terms, or return coordinates. */
+  /* --- Primary: BigDataCloud reverse geocode client --- */
   try {
-    const params = new URLSearchParams({
-      name:     'a',      // minimal query — we use lat/lon for weather; this is just for display
-      count:    '1',
-      language: 'en',
-      format:   'json',
-    });
+    const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      const name    = data.city || data.locality || data.principalSubdivision || null;
+      const country = data.countryName || data.countryCode || '';
+      if (name) {
+        return { name, country, timezone: 'auto' };
+      }
+    }
+  } catch { /* fall through to next provider */ }
 
-    /* Use the weather API's timezone auto-detection to infer region,
-       but for display we'll return a formatted coordinate string
-       until the user searches explicitly. */
-    return {
-      name:    `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`,
-      country: '',
-      timezone: 'auto',
-    };
-  } catch {
-    return {
-      name:    `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`,
-      country: '',
-      timezone: 'auto',
-    };
-  }
+  /* --- Fallback: Nominatim (OpenStreetMap) --- */
+  try {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=en`;
+    const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+    if (res.ok) {
+      const data = await res.json();
+      const addr  = data.address || {};
+      const name  = addr.city || addr.town || addr.village || addr.municipality || addr.county || null;
+      const country = addr.country || '';
+      if (name) {
+        return { name, country, timezone: 'auto' };
+      }
+    }
+  } catch { /* fall through to coordinate string */ }
+
+  /* --- Final fallback: show coordinates --- */
+  return {
+    name:     `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`,
+    country:  '',
+    timezone: 'auto',
+  };
 }

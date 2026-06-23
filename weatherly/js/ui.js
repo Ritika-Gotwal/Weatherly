@@ -45,7 +45,7 @@ function initErrorClose() {
    HERO
    ========================================================= */
 function renderHero(current) {
-  document.getElementById('heroCity').textContent      = `${current.city}, ${current.country}`;
+  document.getElementById('heroCity').textContent      = current.country ? `${current.city}, ${current.country}` : current.city;
   document.getElementById('heroDatetime').textContent  = current.datetime;
   document.getElementById('heroTemp').textContent      = current.temp;
   document.getElementById('heroCondition').textContent = current.condition;
