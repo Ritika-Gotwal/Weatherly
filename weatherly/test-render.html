@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"/><title>Test render</title></head>
+<body>
+<script>
+/* Load the app in an iframe with mock data injected after DOM ready */
+const iframe = document.createElement('iframe');
+iframe.src = 'index.html';
+iframe.style.width = '100vw';
+iframe.style.height = '100vh';
+iframe.style.border = 'none';
+document.body.style.margin = '0';
+document.body.appendChild(iframe);
+
+iframe.addEventListener('load', () => {
+  const win = iframe.contentWindow;
+
+  /* Mock data matching New York reference values */
+  const mockWeather = {
+    current: {
+      city: 'New York', country: 'USA',
+      datetime: 'Monday, 12 May 2025 • 10:30 AM',
+      temp: 23, condition: 'Partly Cloudy',
+      iconPath: 'assets/icons/partly-cloudy-day.svg',
+      high: 24, low: 16,
+    },
+    highlights: {
+      feelsLike: 25, humidity: 62, wind: 14,
+      uvIndex: 5, uvLabel: 'Moderate',
+      visibility: 10, pressure: 1012,
+    },
+    hourly: [
+      { time:'11 AM', temp:23, iconPath:'assets/icons/partly-cloudy-day.svg', isCurrent:true },
+      { time:'12 PM', temp:22, iconPath:'assets/icons/partly-cloudy-day.svg', isCurrent:false },
+      { time:'1 PM',  temp:24, iconPath:'assets/icons/clear-day.svg', isCurrent:false },
+      { time:'2 PM',  temp:24, iconPath:'assets/icons/clear-day.svg', isCurrent:false },
+      { time:'3 PM',  temp:23, iconPath:'assets/icons/partly-cloudy-day.svg', isCurrent:false },
+      { time:'4 PM',  temp:22, iconPath:'assets/icons/partly-cloudy-day.svg', isCurrent:false },
+      { time:'5 PM',  temp:20, iconPath:'assets/icons/partly-cloudy-day.svg', isCurrent:false },
+      { time:'6 PM',  temp:18, iconPath:'assets/icons/cloudy.svg', isCurrent:false },
+      { time:'7 PM',  temp:18, iconPath:'assets/icons/cloudy.svg', isCurrent:false },
+    ],
+    daily: [
+      { label:'Monday',    condition:'Partly Cloudy', iconPath:'assets/icons/partly-cloudy-day.svg', high:24, low:16, rainChance:0,  barOffset:26, barWidth:16 },
+      { label:'Tuesday',   condition:'Sunny',         iconPath:'assets/icons/clear-day.svg',          high:25, low:17, rainChance:0,  barOffset:28, barWidth:16 },
+      { label:'Wednesday', condition:'Light Rain',    iconPath:'assets/icons/rain.svg',               high:22, low:13, rainChance:60, barOffset:22, barWidth:18 },
+      { label:'Thursday',  condition:'Cloudy',        iconPath:'assets/icons/cloudy.svg',             high:18, low:13, rainChance:20, barOffset:22, barWidth:10 },
+      { label:'Friday',    condition:'Partly Cloudy', iconPath:'assets/icons/partly-cloudy-day.svg', high:20, low:14, rainChance:10, barOffset:24, barWidth:12 },
+      { label:'Saturday',  condition:'Sunny',         iconPath:'assets/icons/clear-day.svg',          high:22, low:14, rainChance:0,  barOffset:24, barWidth:16 },
+      { label:'Sunday',    condition:'Cloudy',        iconPath:'assets/icons/cloudy.svg',             high:19, low:12, rainChance:20, barOffset:20, barWidth:14 },
+    ],
+    sun: { sunrise:'5:43 AM', sunset:'8:12 PM', progress: 0.4 },
+    details: { dewPoint:15, cloudCover:40, windGust:22, rainChance:20 },
+  };
+
+  try {
+    win.renderHero(mockWeather.current);
+    win.renderHighlights(mockWeather.highlights);
+    win.renderHourly(mockWeather.hourly);
+    win.renderDaily(mockWeather.daily);
+    win.renderAirQuality(42);
+    win.renderSunriseSunset(mockWeather.sun);
+    win.renderDetails(mockWeather.details);
+    win.showWeather();
+    console.log('Mock data rendered successfully');
+  } catch(e) {
+    console.error('Render error:', e);
+  }
+});
+</script>
+</body>
+</html>

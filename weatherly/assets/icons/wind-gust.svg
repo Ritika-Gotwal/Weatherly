@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <path d="M4 8h10a3 3 0 1 0-3-3" stroke="#4f8ef7" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+  <path d="M4 12h14a3 3 0 1 1-3 3" stroke="#4f8ef7" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+  <path d="M4 16h8" stroke="#4f8ef7" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- Speed lines -->
+  <line x1="1" y1="8" x2="3.5" y2="8" stroke="#4f8ef7" stroke-width="1.6" stroke-linecap="round" opacity="0.5"/>
+  <line x1="1" y1="12" x2="3.5" y2="12" stroke="#4f8ef7" stroke-width="1.6" stroke-linecap="round" opacity="0.5"/>
+</svg>

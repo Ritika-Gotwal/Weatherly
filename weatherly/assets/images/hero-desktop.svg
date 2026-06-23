@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <!-- Horizontal sky: bright blue left → purple → sunset orange right -->
+    <linearGradient id="hg" x1="0" y1="0.5" x2="1" y2="0.5">
+      <stop offset="0%"   stop-color="#2c80e8"/>
+      <stop offset="10%"  stop-color="#3488f0"/>
+      <stop offset="22%"  stop-color="#3a8ef8"/>
+      <stop offset="32%"  stop-color="#5838a0"/>
+      <stop offset="41%"  stop-color="#9a3868"/>
+      <stop offset="50%"  stop-color="#c86030"/>
+      <stop offset="60%"  stop-color="#e87e20"/>
+      <stop offset="70%"  stop-color="#c86010"/>
+      <stop offset="82%"  stop-color="#7a2c08"/>
+      <stop offset="100%" stop-color="#241018"/>
+    </linearGradient>
+    <!-- Top atmospheric darkening -->
+    <linearGradient id="vt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#030810" stop-opacity="0.52"/>
+      <stop offset="38%" stop-color="#030810" stop-opacity="0"/>
+    </linearGradient>
+    <!-- Bottom vignette — blends into the dark page below -->
+    <linearGradient id="vb" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="55%" stop-color="#030810" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#030810" stop-opacity="0.60"/>
+    </linearGradient>
+    <!-- Warm golden sun glow (right-center) -->
+    <radialGradient id="sg" cx="71%" cy="48%" r="34%">
+      <stop offset="0%"   stop-color="#ffd060" stop-opacity="0.55"/>
+      <stop offset="30%"  stop-color="#ff9030" stop-opacity="0.30"/>
+      <stop offset="70%"  stop-color="#ff7020" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#ff7020" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Blue sky ambient glow (upper left) -->
+    <radialGradient id="bg" cx="16%" cy="24%" r="48%">
+      <stop offset="0%"   stop-color="#6090e0" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#6090e0" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Horizon glow band just above city buildings -->
+    <linearGradient id="horiz" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="25%"  stop-color="#5090f8" stop-opacity="0"/>
+      <stop offset="52%"  stop-color="#60a8ff" stop-opacity="0.22"/>
+      <stop offset="65%"  stop-color="#60a8ff" stop-opacity="0.08"/>
+      <stop offset="76%"  stop-color="#5090f8" stop-opacity="0"/>
+    </linearGradient>
+    <!-- Cloud filters -->
+    <filter id="f1" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="16"/>
+    </filter>
+    <filter id="f2" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="24"/>
+    </filter>
+    <filter id="f3" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <!-- Base sky -->
+  <rect width="1440" height="320" fill="url(#hg)"/>
+  <!-- Blue ambient -->
+  <rect width="1440" height="320" fill="url(#bg)"/>
+  <!-- Sun glow -->
+  <rect width="1440" height="320" fill="url(#sg)"/>
+  <!-- Top vignette -->
+  <rect width="1440" height="320" fill="url(#vt)"/>
+  <!-- Bottom vignette -->
+  <rect width="1440" height="320" fill="url(#vb)"/>
+  <!-- Horizon glow -->
+  <rect width="1440" height="320" fill="url(#horiz)"/>
+
+  <!-- Cirrus clouds — blue sky zone -->
+  <ellipse cx="145" cy="55"  rx="240" ry="28" fill="#cce0ff" fill-opacity="0.09" filter="url(#f2)"/>
+  <ellipse cx="350" cy="78"  rx="190" ry="22" fill="#d5e8ff" fill-opacity="0.07" filter="url(#f2)"/>
+  <ellipse cx="490" cy="58"  rx="140" ry="18" fill="#cce0ff" fill-opacity="0.06" filter="url(#f1)"/>
+  <ellipse cx="210" cy="100" rx="120" ry="16" fill="#d0e6ff" fill-opacity="0.06" filter="url(#f1)"/>
+  <ellipse cx="72"  cy="88"  rx="100" ry="14" fill="#c8dcff" fill-opacity="0.07" filter="url(#f3)"/>
+  <ellipse cx="610" cy="52"  rx="90"  ry="12" fill="white"   fill-opacity="0.04" filter="url(#f2)"/>
+  <!-- Horizon haze -->
+  <ellipse cx="720" cy="318" rx="700" ry="55" fill="#ff9a40" fill-opacity="0.10" filter="url(#f2)"/>
+
+  <!-- ===== CITY SKYLINE — BACK LAYER =====
+       Three district clusters rising high into the sky zone.
+       Tallest buildings reach y=95–108 in a 320px canvas. -->
+  <path fill="#05112e" fill-opacity="0.80" d="
+    M 0,320
+    L 0,215
+    L 45,215  L 45,202  L 85,202  L 85,188
+    L 115,188 L 115,174 L 138,174 L 138,158
+    L 158,158 L 158,140 L 172,140 L 172,118
+    L 185,118 L 185,108 L 200,108 L 200,118
+    L 212,118 L 212,132 L 226,132 L 226,148
+    L 244,148 L 244,162 L 268,162 L 268,176
+    L 300,176 L 300,190 L 340,190
+    L 340,200 L 380,200 L 380,208 L 440,208
+    L 440,198 L 455,198 L 455,182
+    L 470,182 L 470,164 L 485,164 L 485,148
+    L 498,148 L 498,130 L 510,130 L 510,112
+    L 522,112 L 522,95  L 535,95  L 535,112
+    L 548,112 L 548,130 L 562,130 L 562,148
+    L 578,148 L 578,165 L 596,165 L 596,180
+    L 618,180 L 618,192 L 645,192
+    L 645,212 L 680,212 L 680,218 L 725,218
+    L 725,212 L 762,212 L 762,206 L 792,206
+    L 792,196 L 810,196 L 810,182
+    L 825,182 L 825,168 L 840,168 L 840,152
+    L 855,152 L 855,136 L 870,136 L 870,120
+    L 883,120 L 883,106 L 898,106 L 898,120
+    L 912,120 L 912,136 L 927,136 L 927,150
+    L 943,150 L 943,165 L 962,165 L 962,178
+    L 984,178 L 984,190 L 1010,190 L 1010,200
+    L 1048,200 L 1048,210 L 1085,210
+    L 1085,218 L 1135,218 L 1135,225
+    L 1195,225 L 1195,232 L 1260,232
+    L 1260,238 L 1330,238 L 1330,244
+    L 1440,244
+    L 1440,320
+    Z
+  "/>
+
+  <!-- ===== CITY SKYLINE — FRONT LAYER =====
+       Foreground silhouette, darker and shorter. -->
+  <path fill="#030c22" fill-opacity="0.93" d="
+    M 0,320
+    L 0,262
+    L 55,262  L 55,254  L 110,254 L 110,264
+    L 168,264 L 168,254 L 225,254 L 225,266
+    L 285,266 L 285,256 L 344,256 L 344,268
+    L 406,268 L 406,258 L 466,258 L 466,270
+    L 528,270 L 528,260 L 590,260 L 590,272
+    L 652,272 L 652,262 L 715,262 L 715,272
+    L 778,272 L 778,262 L 840,262 L 840,272
+    L 904,272 L 904,262 L 968,262 L 968,272
+    L 1032,272 L 1032,262 L 1096,262 L 1096,272
+    L 1160,272 L 1160,262 L 1224,262 L 1224,272
+    L 1288,272 L 1288,264 L 1352,264 L 1352,272
+    L 1416,272 L 1416,266 L 1440,266
+    L 1440,320
+    Z
+  "/>
+</svg>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Weatherly — Premium weather forecasts for any city worldwide." />
+  <title>Weatherly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+
+      <!-- Hamburger (mobile only) -->
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+        <img src="assets/icons/hamburger.svg" alt="" class="hamburger-icon" aria-hidden="true" />
+      </button>
+
+      <!-- Logo (desktop) -->
+      <div class="logo" aria-label="Weatherly home">
+        <img src="assets/icons/logo-cloud.svg" alt="" class="logo-icon" aria-hidden="true" />
+        <span class="logo-text">Weatherly</span>
+      </div>
+
+      <!-- Centered title (mobile only) -->
+      <span class="header-title-mobile" aria-hidden="true">Weatherly</span>
+
+      <!-- Search (desktop) -->
+      <div class="search-wrapper" role="search">
+        <form class="search-form" id="searchForm" autocomplete="off">
+          <img src="assets/icons/search.svg" alt="" class="search-icon" aria-hidden="true" />
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search for a city..."
+            aria-label="Search for a city"
+            spellcheck="false"
+          />
+          <button type="button" class="search-clear-btn" id="searchClearBtn" aria-label="Clear search" hidden>
+            <svg viewBox="0 0 24 24" fill="none" width="13" height="13" aria-hidden="true">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button type="submit" class="search-btn" aria-label="Search">
+            <span class="sr-only">Search</span>
+          </button>
+        </form>
+        <!-- Autocomplete dropdown -->
+        <ul class="autocomplete-list" id="autocompleteList" role="listbox" aria-label="City suggestions" hidden></ul>
+      </div>
+
+      <!-- My Location (beside search bar on desktop) -->
+      <button class="location-btn" id="locationBtn" aria-label="Use my current location">
+        <img src="assets/icons/location-pin.svg" alt="" class="location-icon" aria-hidden="true" />
+        <span class="location-text">My Location</span>
+      </button>
+
+      <!-- Desktop navigation tabs (right side of header) -->
+      <nav class="header-nav" aria-label="Main navigation">
+        <button class="header-nav-item active" data-tab="home" aria-label="Home" aria-current="page">
+          <img src="assets/icons/nav-home.svg" alt="" class="header-nav-icon" aria-hidden="true" />
+          <span>Home</span>
+        </button>
+        <button class="header-nav-item" data-tab="map" aria-label="Map">
+          <img src="assets/icons/nav-map.svg" alt="" class="header-nav-icon" aria-hidden="true" />
+          <span>Map</span>
+        </button>
+        <button class="header-nav-item" data-tab="favorites" aria-label="Favorites">
+          <img src="assets/icons/nav-heart.svg" alt="" class="header-nav-icon" aria-hidden="true" />
+          <span>Favorites</span>
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Mobile search bar (below header, above content) -->
+  <div class="mobile-search-bar" role="search" aria-label="Search for a city">
+    <div class="mobile-search-inner">
+      <form class="search-form" id="mobileSearchForm" autocomplete="off">
+        <img src="assets/icons/search.svg" alt="" class="search-icon" aria-hidden="true" />
+        <input
+          type="text"
+          id="mobileSearchInput"
+          class="search-input"
+          placeholder="Search for a city..."
+          aria-label="Search for a city"
+          spellcheck="false"
+        />
+        <button type="button" class="search-clear-btn" id="mobileSearchClearBtn" aria-label="Clear search" hidden>
+          <svg viewBox="0 0 24 24" fill="none" width="13" height="13" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </form>
+      <ul class="autocomplete-list" id="mobileAutocompleteList" role="listbox" aria-label="City suggestions" hidden></ul>
+    </div>
+  </div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="app-main" id="appMain">
+    <div class="container">
+
+      <!-- EMPTY STATE — shown before first search -->
+      <section class="empty-state" id="emptyState" aria-live="polite">
+        <div class="empty-state-icon">
+          <img src="assets/icons/partly-cloudy-day.svg" alt="Weather illustration" />
+        </div>
+        <h2 class="empty-state-title">Welcome to Weatherly</h2>
+        <p class="empty-state-text">Search for a city or use your current location to see the weather.</p>
+      </section>
+
+      <!-- ERROR STATE -->
+      <div class="error-toast" id="errorToast" role="alert" aria-live="assertive" hidden>
+        <img src="assets/icons/alert.svg" alt="" class="error-icon" aria-hidden="true" />
+        <span class="error-message" id="errorMessage"></span>
+        <button class="error-close" id="errorClose" aria-label="Dismiss error">&times;</button>
+      </div>
+
+      <!-- WEATHER CONTENT — hidden until data loads -->
+      <div class="weather-content" id="weatherContent" hidden>
+
+        <!-- 1. HERO SECTION -->
+        <section class="hero-section" id="heroSection" aria-label="Current weather">
+          <div class="hero-bg" id="heroBg" aria-hidden="true">
+            <img class="hero-bg-img hero-bg-img--desktop" src="assets/images/hero-desktop.jpg" alt="">
+            <img class="hero-bg-img hero-bg-img--mobile"  src="assets/images/hero-mobile.svg"  alt="">
+          </div>
+          <div class="hero-overlay" aria-hidden="true"></div>
+          <div class="hero-body">
+
+            <div class="hero-text">
+              <div class="hero-location">
+                <img src="assets/icons/location-pin.svg" alt="" class="hero-location-icon" aria-hidden="true" />
+                <h1 class="hero-city" id="heroCity">—</h1>
+              </div>
+              <p class="hero-datetime" id="heroDatetime">—</p>
+              <div class="hero-temp-row">
+                <span class="hero-temp" id="heroTemp">—</span>
+                <span class="hero-unit">°C</span>
+              </div>
+              <p class="hero-condition" id="heroCondition">—</p>
+              <div class="hero-hilo">
+                <span class="hero-high" id="heroHigh">
+                  <img src="assets/icons/arrow-up.svg" alt="High" class="hilo-icon" aria-hidden="true" /> —
+                </span>
+                <span class="hero-low" id="heroLow">
+                  <img src="assets/icons/arrow-down.svg" alt="Low" class="hilo-icon" aria-hidden="true" /> —
+                </span>
+              </div>
+            </div>
+
+            <div class="hero-illustration" aria-hidden="true">
+              <img src="" alt="" class="hero-weather-icon" id="heroWeatherIcon" />
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 2. WEATHER HIGHLIGHTS -->
+        <section class="highlights-section" aria-label="Weather highlights">
+          <ul class="highlights-grid" id="highlightsGrid">
+
+            <li class="highlight-card" id="hlFeelsLike">
+              <div class="highlight-icon-wrap">
+                <img src="assets/icons/feels-like.svg" alt="" class="highlight-icon" aria-hidden="true" />
+              </div>
+              <span class="highlight-label">Feels Like</span>
+              <div class="highlight-bottom">
+                <span class="highlight-value" id="hlFeelsLikeVal">—</span>
+              </div>
+            </li>
+
+            <li class="highlight-card" id="hlHumidity">
+              <div class="highlight-icon-wrap">
+                <img src="assets/icons/humidity.svg" alt="" class="highlight-icon" aria-hidden="true" />
+              </div>
+              <span class="highlight-label">Humidity</span>
+              <div class="highlight-bottom">
+                <span class="highlight-value" id="hlHumidityVal">—</span>
+              </div>
+            </li>
+
+            <li class="highlight-card" id="hlWind">
+              <div class="highlight-icon-wrap">
+                <img src="assets/icons/wind.svg" alt="" class="highlight-icon" aria-hidden="true" />
+              </div>
+              <span class="highlight-label">Wind</span>
+              <div class="highlight-bottom">
+                <span class="highlight-value" id="hlWindVal">—</span>
+                <span class="highlight-unit">km/h</span>
+              </div>
+            </li>
+
+            <li class="highlight-card" id="hlUV">
+              <div class="highlight-icon-wrap">
+                <img src="assets/icons/uv-index.svg" alt="" class="highlight-icon" aria-hidden="true" />
+              </div>
+              <span class="highlight-label">UV Index</span>
+              <div class="highlight-bottom">
+                <span class="highlight-value" id="hlUVVal">—</span>
+                <span class="highlight-unit" id="hlUVLabel">—</span>
+              </div>
+            </li>
+
+            <li class="highlight-card highlight-visibility-card" id="hlVisibility">
+              <div class="highlight-icon-wrap">
+                <img src="assets/icons/visibility.svg" alt="" class="highlight-icon" aria-hidden="true" />
+              </div>
+              <span class="highlight-label">Visibility</span>
+              <div class="highlight-bottom">
+                <span class="highlight-value" id="hlVisibilityVal">—</span>
+                <span class="highlight-unit">km</span>
+              </div>
+            </li>
+
+            <li class="highlight-card" id="hlPressure">
+              <div class="highlight-icon-wrap">
+                <img src="assets/icons/pressure.svg" alt="" class="highlight-icon" aria-hidden="true" />
+              </div>
+              <span class="highlight-label">Pressure</span>
+              <div class="highlight-bottom">
+                <span class="highlight-value" id="hlPressureVal">—</span>
+                <span class="highlight-unit">hPa</span>
+              </div>
+            </li>
+
+          </ul>
+        </section>
+
+        <!-- 3. HOURLY FORECAST -->
+        <section class="forecast-card hourly-section" aria-label="Hourly forecast">
+          <div class="card-header">
+            <h2 class="card-title">Hourly Forecast</h2>
+            <a href="#" class="card-view-all" aria-label="View all hourly forecast">View All</a>
+          </div>
+          <div class="hourly-scroll-wrapper">
+            <ul class="hourly-list" id="hourlyList" role="list">
+              <!-- Populated by ui.js -->
+            </ul>
+          </div>
+        </section>
+
+        <!-- 4. 7-DAY FORECAST -->
+        <section class="forecast-card daily-section" aria-label="7-day forecast">
+          <div class="card-header">
+            <h2 class="card-title">7-Day Forecast</h2>
+            <a href="#" class="card-view-all">View All</a>
+          </div>
+          <ul class="daily-list" id="dailyList" role="list">
+            <!-- Populated by ui.js -->
+          </ul>
+        </section>
+
+        <!-- 5. BOTTOM ROW: Air Quality + Sunrise/Sunset + Details -->
+        <div class="bottom-row" aria-label="Additional weather details">
+
+          <!-- Air Quality -->
+          <section class="bottom-card air-quality-card" aria-label="Air quality">
+            <h2 class="card-title">Air Quality</h2>
+            <div class="aqi-body">
+              <div class="aqi-gauge-wrap">
+                <svg class="aqi-gauge" viewBox="0 0 120 120" aria-hidden="true">
+                  <circle class="aqi-track" cx="60" cy="60" r="50" />
+                  <circle class="aqi-fill" id="aqiFill" cx="60" cy="60" r="50" />
+                </svg>
+                <div class="aqi-number-wrap">
+                  <span class="aqi-number" id="aqiNumber">—</span>
+                </div>
+              </div>
+              <div class="aqi-info">
+                <span class="aqi-category" id="aqiCategory">—</span>
+                <p class="aqi-description" id="aqiDescription">—</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Sunrise & Sunset -->
+          <section class="bottom-card sunrise-card" aria-label="Sunrise and sunset">
+            <h2 class="card-title">Sunrise &amp; Sunset</h2>
+            <div class="sun-arc-wrap">
+              <svg class="sun-arc-svg" viewBox="0 0 280 140" aria-hidden="true">
+                <!-- Track arc -->
+                <path class="sun-arc-track" d="M 20 130 Q 140 10 260 130" fill="none" />
+                <!-- Progress arc (clipped) -->
+                <path class="sun-arc-progress" id="sunArcProgress" d="M 20 130 Q 140 10 260 130" fill="none" />
+                <!-- Sun dot -->
+                <circle class="sun-dot" id="sunDot" cx="20" cy="130" r="8" />
+                <!-- Horizon line -->
+                <line class="sun-horizon" x1="10" y1="130" x2="270" y2="130" />
+              </svg>
+              <div class="sun-times">
+                <div class="sun-time-item">
+                  <img src="assets/icons/sunrise.svg" alt="Sunrise" class="sun-time-icon" />
+                  <span class="sun-time-value" id="sunriseTime">—</span>
+                </div>
+                <div class="sun-time-item sun-time-right">
+                  <img src="assets/icons/sunset.svg" alt="Sunset" class="sun-time-icon" />
+                  <span class="sun-time-value" id="sunsetTime">—</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Details -->
+          <section class="bottom-card details-card" aria-label="Additional details">
+            <h2 class="card-title">Details</h2>
+            <ul class="details-list">
+              <li class="details-row">
+                <div class="details-label-wrap">
+                  <img src="assets/icons/dew-point.svg" alt="" class="details-icon" aria-hidden="true" />
+                  <span class="details-label">Dew Point</span>
+                </div>
+                <span class="details-value" id="detDewPoint">—</span>
+              </li>
+              <li class="details-row">
+                <div class="details-label-wrap">
+                  <img src="assets/icons/cloud-cover.svg" alt="" class="details-icon" aria-hidden="true" />
+                  <span class="details-label">Cloud Cover</span>
+                </div>
+                <span class="details-value" id="detCloudCover">—</span>
+              </li>
+              <li class="details-row">
+                <div class="details-label-wrap">
+                  <img src="assets/icons/wind-gust.svg" alt="" class="details-icon" aria-hidden="true" />
+                  <span class="details-label">Wind Gust</span>
+                </div>
+                <span class="details-value" id="detWindGust">—</span>
+              </li>
+              <li class="details-row">
+                <div class="details-label-wrap">
+                  <img src="assets/icons/raindrop.svg" alt="" class="details-icon" aria-hidden="true" />
+                  <span class="details-label">Chance of Rain</span>
+                </div>
+                <span class="details-value" id="detRainChance">—</span>
+              </li>
+            </ul>
+          </section>
+
+        </div><!-- /.bottom-row -->
+
+      </div><!-- /#weatherContent -->
+
+      <!-- MAP VIEW (mobile tab) -->
+      <div id="mapView" class="tab-view" hidden>
+        <div class="tab-view-header">
+          <h2 class="tab-view-title">Weather Map</h2>
+        </div>
+        <div class="map-area">
+          <div class="map-placeholder-card">
+            <svg class="map-placeholder-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M32 6C21 6 12 15 12 26C12 40 32 58 32 58C32 58 52 40 52 26C52 15 43 6 32 6Z" stroke="#90caf9" stroke-width="2.5" fill="none"/>
+              <circle cx="32" cy="26" r="7" stroke="#90caf9" stroke-width="2.5" fill="none"/>
+            </svg>
+            <p class="map-placeholder-label" id="mapCityLabel">Search for a city to see its location</p>
+            <a class="map-open-btn" id="mapOpenBtn" href="#" target="_blank" rel="noopener">Open in Maps</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAVORITES VIEW (mobile tab) -->
+      <div id="favoritesView" class="tab-view" hidden>
+        <div class="tab-view-header">
+          <h2 class="tab-view-title">Favorites</h2>
+        </div>
+        <div id="favoritesList" class="favorites-list">
+          <div class="favorites-empty-state">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="favorites-empty-icon">
+              <path d="M32 54L10 34C5 29 5 21 10 16C15 11 23 11 28 16L32 20L36 16C41 11 49 11 54 16C59 21 59 29 54 34L32 54Z" stroke="#90caf9" stroke-width="2.5" fill="none"/>
+            </svg>
+            <p>No favorites yet. Search for a city and tap the heart to save it.</p>
+          </div>
+        </div>
+        <button class="fav-save-btn" id="favSaveBtn" hidden>
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          Save <span id="favSaveCityName"></span> to Favorites
+        </button>
+      </div>
+
+
+      <!-- SKELETON LOADERS -->
+      <div class="skeleton-content" id="skeletonContent" hidden aria-hidden="true">
+        <div class="skeleton skeleton-hero"></div>
+        <div class="skeleton-highlights">
+          <div class="skeleton skeleton-hl"></div>
+          <div class="skeleton skeleton-hl"></div>
+          <div class="skeleton skeleton-hl"></div>
+          <div class="skeleton skeleton-hl"></div>
+          <div class="skeleton skeleton-hl"></div>
+          <div class="skeleton skeleton-hl"></div>
+        </div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton-bottom">
+          <div class="skeleton skeleton-bot"></div>
+          <div class="skeleton skeleton-bot"></div>
+          <div class="skeleton skeleton-bot"></div>
+        </div>
+      </div>
+
+    </div><!-- /.container -->
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="app-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="assets/icons/logo-cloud.svg" alt="" class="footer-logo-icon" aria-hidden="true" />
+        <span class="footer-logo-text">Weatherly</span>
+      </div>
+      <p class="footer-copy">&copy; 2025 Weatherly. All rights reserved.</p>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="#" class="footer-link">Privacy Policy</a>
+        <span class="footer-sep" aria-hidden="true">&middot;</span>
+        <a href="#" class="footer-link">Terms of Service</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- ===== MOBILE BOTTOM NAV ===== -->
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+    <button class="mobile-nav-item active" data-tab="home" aria-label="Home" aria-current="page">
+      <img src="assets/icons/nav-home.svg" alt="" class="mobile-nav-icon" aria-hidden="true" />
+      <span class="mobile-nav-label">Home</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="map" aria-label="Map">
+      <img src="assets/icons/nav-map.svg" alt="" class="mobile-nav-icon" aria-hidden="true" />
+      <span class="mobile-nav-label">Map</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="favorites" aria-label="Favorites">
+      <img src="assets/icons/nav-heart.svg" alt="" class="mobile-nav-icon" aria-hidden="true" />
+      <span class="mobile-nav-label">Favorites</span>
+    </button>
+  </nav>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="js/forecast.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/geolocation.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

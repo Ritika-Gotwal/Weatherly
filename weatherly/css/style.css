@@ -1,0 +1,97 @@
+/* =========================================================
+   STYLE.CSS — global reset + import chain entry point
+   ========================================================= */
+
+@import url('variables.css');
+@import url('layout.css');
+@import url('components.css');
+
+/* ----- [hidden] must beat any display:flex / display:grid rules ----- */
+[hidden] {
+  display: none !important;
+}
+
+/* ----- Box model reset ----- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ----- Base ----- */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  /* background handled by layout.css via gradient */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ----- Typography ----- */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+p {
+  line-height: var(--line-height-normal);
+}
+
+/* ----- Images ----- */
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ----- Interactive ----- */
+button {
+  font-family: var(--font-family);
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+input, button, select, textarea {
+  font-family: inherit;
+}
+
+/* ----- Lists ----- */
+ul, ol {
+  list-style: none;
+}
+
+/* ----- Scrollbar (webkit) — thin, themed ----- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.40);
+}
+
+/* Both platforms use dark backgrounds — keep white scrollbar throughout */
+
+/* ----- Selection highlight ----- */
+::selection {
+  background: rgba(79, 142, 247, 0.3);
+  color: var(--color-text-primary);
+}
