@@ -57,7 +57,7 @@ body {
   right: 0;
   height: var(--header-height);
   background-color: var(--color-header-bg);   /* transparent on mobile, dark on desktop */
-  border-bottom: 1px solid var(--color-header-border);
+  border-bottom: none;
   z-index: var(--z-header);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -119,8 +119,6 @@ body {
     align-items: center;
     gap: var(--space-1);
     flex-shrink: 0;
-    /* Subtle left divider to separate from location button */
-    border-left: 1px solid rgba(255, 255, 255, 0.12);
     padding-left: var(--space-3);
     margin-left: var(--space-2);
   }
@@ -286,7 +284,6 @@ body {
     /* Dark navy pill — matches reference mobile search bar */
     background: rgba(8, 18, 58, 0.60);
     border-radius: var(--radius-full);
-    border: 1px solid rgba(255, 255, 255, 0.14);
   }
 }
 
@@ -297,7 +294,6 @@ body {
 
 /* ----- FOOTER ----- */
 .app-footer {
-  border-top: 1px solid var(--color-header-border);
   padding: var(--space-5) 0;
   background: rgba(4, 9, 20, 0.72);
   backdrop-filter: blur(16px);
@@ -314,7 +310,6 @@ body {
     background: rgba(4, 9, 20, 0.88);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 }
 
@@ -385,7 +380,6 @@ body {
   right: 0;
   height: var(--mobile-nav-height);
   background-color: var(--color-nav-bg);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
   z-index: var(--z-mobile-nav);
 }
 
@@ -443,14 +437,6 @@ body {
   overflow: hidden;
   min-height: 220px;
   box-shadow: var(--shadow-lg);
-  border: 1px solid rgba(255, 255, 255, 0.20);
-}
-
-/* Mobile: match bordered card style of other sections */
-@media (max-width: 767px) {
-  .hero-section {
-    border-color: rgba(255, 255, 255, 0.34);
-  }
 }
 
 /* Highlights grid */
@@ -467,7 +453,6 @@ body {
   /* Card container — matches forecast-card style, signals section is self-contained */
   .highlights-section {
     background: rgba(255, 255, 255, 0.14);
-    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: var(--radius-xl);
     padding: var(--space-3) 0 var(--space-3) var(--space-4);
     position: relative;
@@ -506,7 +491,6 @@ body {
 /* Forecast cards (Hourly + Daily) */
 .forecast-card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: var(--card-padding);
   backdrop-filter: blur(20px);
@@ -518,7 +502,6 @@ body {
 @media (max-width: 767px) {
   .forecast-card {
     background: rgba(255, 255, 255, 0.26);
-    border-color: rgba(255, 255, 255, 0.34);
   }
 }
 
@@ -539,7 +522,6 @@ body {
 
 .bottom-card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: var(--card-padding);
   backdrop-filter: blur(20px);
@@ -551,6 +533,5 @@ body {
 @media (max-width: 767px) {
   .bottom-card {
     background: rgba(255, 255, 255, 0.26);
-    border-color: rgba(255, 255, 255, 0.34);
   }
 }
