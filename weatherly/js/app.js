@@ -27,6 +27,11 @@ function init() {
   initHourlyDragScroll();
   initHourlyWheelScroll();
 
+  /* "View All" links are placeholders — prevent the href="#" page jump */
+  document.querySelectorAll('.card-view-all').forEach(link => {
+    link.addEventListener('click', e => e.preventDefault());
+  });
+
   /* Try to load last searched city from sessionStorage */
   const cached = sessionStorage.getItem('weatherly_last');
   if (cached) {
@@ -80,6 +85,14 @@ function initMobileNav() {
   document.querySelectorAll('.tab-back-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelector('[data-tab="home"]')?.click();
+    });
+  });
+
+  /* Logo (desktop) + mobile title → navigate to home and scroll to top */
+  document.querySelectorAll('.logo, .header-title-mobile').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelector('[data-tab="home"]')?.click();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   });
 

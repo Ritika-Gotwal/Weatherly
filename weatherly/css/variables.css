@@ -18,8 +18,8 @@
   --color-border:          rgba(255, 255, 255, 0.16);
   --color-border-strong:   rgba(255, 255, 255, 0.26);
 
-  /* Header — transparent on mobile (blends with vivid blue page) */
-  --color-header-bg:       transparent;
+  /* Header — same dark navy as footer/bottom-nav, semi-transparent */
+  --color-header-bg:       rgba(6, 14, 50, 0.82);
   --color-header-border:   rgba(255, 255, 255, 0.10);
 
   /* Text — white throughout (vivid blue background) */
@@ -57,10 +57,10 @@
   --color-nav-inactive:    rgba(255, 255, 255, 0.52);
 
   /* Shadows */
-  --shadow-sm:   0 2px 8px  rgba(0, 0, 0, 0.22);
-  --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.28);
-  --shadow-lg:   0 8px 32px rgba(0, 0, 0, 0.35);
-  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.22);
+  --shadow-sm:   none;
+  --shadow-md:   none;
+  --shadow-lg:   none;
+  --shadow-card: none;
 
   /* -------------------------------------------------------
      TYPOGRAPHY
@@ -176,9 +176,9 @@
     --color-temp-bar-track:  rgba(255, 255, 255, 0.14);
 
     /* Stronger shadows on dark bg */
-    --shadow-sm:   0 2px 8px  rgba(0, 0, 0, 0.40);
-    --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.45);
-    --shadow-lg:   0 8px 32px rgba(0, 0, 0, 0.55);
-    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.40);
+    --shadow-sm:   none;
+    --shadow-md:   none;
+    --shadow-lg:   none;
+    --shadow-card: none;
   }
 }

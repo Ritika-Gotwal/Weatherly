@@ -29,13 +29,7 @@
   color: var(--color-accent-blue);
   text-decoration: none;
   opacity: 0.90;
-  transition: opacity var(--transition-fast);
-}
-
-.card-view-all:hover,
-.card-view-all:focus-visible {
-  opacity: 1;
-  text-decoration: underline;
+  cursor: text;
 }
 
 /* ----- Screen-reader only ----- */
@@ -146,7 +140,6 @@
   padding: var(--space-2) 0;
   margin: 0;
   z-index: var(--z-dropdown);
-  box-shadow: var(--shadow-lg);
   max-height: 280px;
   overflow-y: auto;
   backdrop-filter: blur(20px);
@@ -462,7 +455,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.60);
 }
 
 .hero-datetime {
@@ -484,7 +476,6 @@
   color: var(--color-hero-text);
   line-height: 1;
   letter-spacing: -0.03em;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
 }
 
 .hero-unit {
@@ -500,7 +491,6 @@
   font-weight: var(--font-weight-regular);
   color: var(--color-hero-text);
   margin: 0 0 var(--space-3) 0;
-  text-shadow: 0 1px 6px rgba(0, 8, 24, 0.50);
 }
 
 .hero-hilo {
@@ -538,7 +528,6 @@
   width: clamp(120px, 14vw, 180px);
   height: clamp(120px, 14vw, 180px);
   object-fit: contain;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
 }
 
 @media (max-width: 767px) {
@@ -555,19 +544,29 @@
 
   .hero-body {
     padding: var(--space-5) var(--space-4);
-    min-height: 400px;
+    min-height: 260px;
     overflow: hidden;
-    gap: var(--space-3);    /* tighter gap on mobile so icon doesn't push off-screen */
+    gap: var(--space-3);
   }
 
-  .hero-temp  { font-size: 4.5rem; }
-  .hero-city  { font-size: var(--font-size-lg); }
+  .hero-temp { font-size: 4.5rem; }
+
+  /* Allow long "City, Country" names to wrap on narrow screens */
+  .hero-city {
+    font-size: 1rem;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: unset;
+    line-height: 1.25;
+  }
 
   .hero-weather-icon {
     width: 130px;
     height: 130px;
     flex-shrink: 0;
-    filter: drop-shadow(0 4px 20px rgba(0, 0, 80, 0.25));
   }
 }
 
@@ -587,7 +586,6 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   min-height: 92px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
 }
 
 .highlight-card:hover {
@@ -604,9 +602,8 @@
     flex: 0 0 90px;
     min-height: 90px;
     padding: 12px 10px 10px;
-    /* Higher opacity — reference cards are visibly distinct on vivid blue */
-    background: rgba(255, 255, 255, 0.30);
-    border-color: rgba(255, 255, 255, 0.38);
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.22);
   }
   .highlight-icon-wrap {
     width: 26px;
@@ -738,7 +735,23 @@
   scroll-snap-align: start;
 }
 
-/* Mobile: brighter hour cards on vivid blue */
+/* Scroll extends edge-to-edge on all screen sizes */
+.hourly-section {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Push scroll wrapper into the card's right padding so it reaches the border */
+.hourly-scroll-wrapper {
+  margin-right: calc(-1 * var(--card-padding));
+}
+
+/* Restore end spacing so the last card isn't flush against the border */
+.hourly-list {
+  padding-right: var(--card-padding);
+}
+
+/* Mobile: hour card colours */
 @media (max-width: 767px) {
   .hour-card {
     background: rgba(255, 255, 255, 0.22);
@@ -1011,7 +1024,6 @@
 
 .sun-dot {
   fill: var(--color-accent-warm);
-  filter: drop-shadow(0 0 6px rgba(245, 166, 35, 0.8));
 }
 
 .sun-horizon {

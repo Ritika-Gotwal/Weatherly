@@ -14,14 +14,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* Mobile: vivid royal blue — reference shows rich ~#1535c4 blue */
-  background: linear-gradient(175deg,
-    #0e2070 0%,
-    #1535c4 30%,
-    #1a40d0 55%,
-    #1535c4 80%,
-    #0e2070 100%
-  );
+  /* Mobile: uniform vivid royal blue — no dark extremes */
+  background: #1535c4;
   background-attachment: fixed;
   color: var(--color-text-primary);
   font-family: var(--font-family);
@@ -86,6 +80,11 @@ body {
   gap: var(--space-2);
   flex-shrink: 0;
   text-decoration: none;
+  cursor: pointer;
+}
+
+.header-title-mobile {
+  cursor: pointer;
 }
 
 .logo-icon {
@@ -231,8 +230,8 @@ body {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
-  pointer-events: none;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 /* ---- Mobile header: hamburger | Weatherly (centered) | pin ---- */
@@ -378,7 +377,8 @@ body {
 
 /* ----- MOBILE BOTTOM NAV ----- */
 .mobile-nav {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -389,13 +389,12 @@ body {
   z-index: var(--z-mobile-nav);
 }
 
+
 @media (min-width: 768px) {
   .mobile-nav { display: none; }
 }
 
 .mobile-nav-item {
-  flex: 1 1 0;
-  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -465,7 +464,20 @@ body {
 }
 
 @media (max-width: 767px) {
-  .highlights-grid {
+  /* Card container — matches forecast-card style, signals section is self-contained */
+  .highlights-section {
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius-xl);
+    padding: var(--space-3) 0 var(--space-3) var(--space-4);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-card);
+  }
+
+.highlights-grid {
     display: flex;
     flex-direction: row;
     overflow-x: auto;
@@ -473,6 +485,7 @@ body {
     scrollbar-width: none;
     -ms-overflow-style: none;
     gap: 10px;
+    padding-right: var(--space-4);
     padding-bottom: 4px;
   }
   .highlights-grid::-webkit-scrollbar { display: none; }
