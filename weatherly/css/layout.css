@@ -197,7 +197,18 @@ body {
   width: 16px;
   height: 16px;
   opacity: 0.75;
-  filter: brightness(10);   /* always white — both backgrounds are dark */
+  filter: brightness(10);
+  transition: opacity var(--transition-fast);
+}
+
+@keyframes location-pulse {
+  0%, 100% { opacity: 0.75; transform: scale(1); }
+  50%       { opacity: 1;    transform: scale(1.25); }
+}
+
+.location-btn.is-locating .location-icon {
+  animation: location-pulse 0.9s ease-in-out infinite;
+  opacity: 1;
 }
 
 /* Hamburger — hidden by default, shown on mobile */

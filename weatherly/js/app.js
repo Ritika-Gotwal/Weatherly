@@ -17,9 +17,27 @@ window.app = {
 };
 
 /* =========================================================
+   Splash screen — enforce a minimum visible duration then fade out
+   ========================================================= */
+function hideSplash() {
+  const MIN_MS = 1700;
+  const elapsed = Date.now() - (window._splashStart || Date.now());
+  const wait = Math.max(0, MIN_MS - elapsed);
+
+  setTimeout(() => {
+    const el = document.getElementById('splashScreen');
+    if (!el) return;
+    el.classList.add('splash-hidden');
+    el.addEventListener('transitionend', () => el.remove(), { once: true });
+  }, wait);
+}
+
+/* =========================================================
    Init
    ========================================================= */
 function init() {
+  hideSplash();
+
   initSearch();
   initErrorClose();
   initLocationButton();
@@ -28,11 +46,6 @@ function init() {
   initHeroFavBtn();
   initHourlyDragScroll();
   initHourlyWheelScroll();
-
-  /* "View All" links are placeholders — prevent the href="#" page jump */
-  document.querySelectorAll('.card-view-all').forEach(link => {
-    link.addEventListener('click', e => e.preventDefault());
-  });
 
   /* Try to load last searched city from sessionStorage */
   const cached = sessionStorage.getItem('weatherly_last');

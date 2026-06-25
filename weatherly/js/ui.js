@@ -197,9 +197,11 @@ function setLocationBtnLoading(loading) {
   const text = btn.querySelector('.location-text');
   if (loading) {
     btn.disabled = true;
+    btn.classList.add('is-locating');
     if (text) text.textContent = 'Locating…';
   } else {
     btn.disabled = false;
+    btn.classList.remove('is-locating');
     if (text) text.textContent = 'My Location';
   }
 }
