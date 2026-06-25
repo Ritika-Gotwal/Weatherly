@@ -47,6 +47,10 @@ function init() {
   initHourlyDragScroll();
   initHourlyWheelScroll();
 
+  /* Default tab is home — hide mobile search bar on start */
+  const mobileSearch = document.querySelector('.mobile-search-bar');
+  if (mobileSearch) mobileSearch.hidden = true;
+
   /* Try to load last searched city from sessionStorage */
   const cached = sessionStorage.getItem('weatherly_last');
   if (cached) {
@@ -193,11 +197,15 @@ function switchTab(tab) {
   const weatherContent = document.getElementById('weatherContent');
   const skeletonContent = document.getElementById('skeletonContent');
   const emptyState     = document.getElementById('emptyState');
-  const mapView        = document.getElementById('mapView');
+  const searchView     = document.getElementById('searchView');
   const favoritesView  = document.getElementById('favoritesView');
 
+  /* Search bar hidden on all tabs — each view manages its own search */
+  const mobileSearch = document.querySelector('.mobile-search-bar');
+  if (mobileSearch) mobileSearch.hidden = true;
+
   /* Hide all non-home views */
-  [mapView, favoritesView].forEach(v => { if (v) v.hidden = true; });
+  [searchView, favoritesView].forEach(v => { if (v) v.hidden = true; });
 
   if (tab === 'home') {
     if (state.weather) showWeather();
@@ -210,10 +218,10 @@ function switchTab(tab) {
     if (skeletonContent) skeletonContent.hidden = true;
     if (emptyState) emptyState.hidden = true;
 
-    if (tab === 'map') {
-      if (mapView) {
-        mapView.hidden = false;
-        updateMapView();
+    if (tab === 'search') {
+      if (searchView) {
+        searchView.hidden = false;
+        renderSearchTab();
       }
     } else if (tab === 'favorites') {
       if (favoritesView) {
@@ -287,16 +295,138 @@ function renderFavoritesList() {
   });
 }
 
-function updateMapView() {
-  const label = document.getElementById('mapCityLabel');
-  const link  = document.getElementById('mapOpenBtn');
-  if (!state.city) return;
-  if (label) label.textContent = `${state.city.name}, ${state.city.country}`;
-  if (link) {
-    const { lat, lon, name } = state.city;
-    link.href = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=12/${lat}/${lon}`;
-    link.textContent = `Open ${name} in Maps`;
+function renderSearchTab() {
+  /* Recents */
+  const recentSection = document.getElementById('searchTabRecents');
+  const recentList    = document.getElementById('searchTabRecentList');
+  if (recentList) {
+    const recents = getRecents();
+    if (recents.length) {
+      /* Header row + items live inside the dark glass list so text stays white */
+      recentList.innerHTML = `
+        <li class="search-tab-list-header">
+          <span>Recent</span>
+          <button class="search-tab-clear-all" id="searchTabClearAll">Clear all</button>
+        </li>
+        ${recents.map((r, i) => `
+          <li class="search-tab-list-item" data-index="${i}">
+            <div class="search-tab-list-text">
+              <span class="search-tab-list-name">${r.name}</span>
+              <span class="search-tab-list-sub">${r.country || ''}</span>
+            </div>
+            <button class="search-tab-recent-del" data-index="${i}" aria-label="Remove ${r.name}">✕</button>
+          </li>
+        `).join('')}
+      `;
+      if (recentSection) recentSection.hidden = false;
+
+      /* City rows — load weather */
+      recentList.querySelectorAll('.search-tab-list-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          if (e.target.closest('.search-tab-recent-del')) return;
+          const r = recents[parseInt(item.dataset.index, 10)];
+          if (r) {
+            document.querySelector('[data-tab="home"]')?.click();
+            loadWeather(r.latitude, r.longitude, r.timezone || 'auto', r.name, r.country);
+          }
+        });
+      });
+
+      /* Individual delete */
+      recentList.querySelectorAll('.search-tab-recent-del').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const idx = parseInt(btn.dataset.index, 10);
+          const updated = getRecents().filter((_, i) => i !== idx);
+          localStorage.setItem(RECENTS_KEY, JSON.stringify(updated));
+          renderSearchTab();
+        });
+      });
+
+      /* Clear all */
+      const clearAllBtn = document.getElementById('searchTabClearAll');
+      if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', () => {
+          localStorage.removeItem(RECENTS_KEY);
+          renderSearchTab();
+        });
+      }
+    } else {
+      if (recentSection) recentSection.hidden = true;
+    }
   }
+
+  /* Popular city chips */
+  document.querySelectorAll('.search-tab-chip').forEach(chip => {
+    chip.onclick = () => {
+      document.querySelector('[data-tab="home"]')?.click();
+      loadByQuery(chip.dataset.city);
+    };
+  });
+
+  /* Search input — live results */
+  const input       = document.getElementById('searchTabInput');
+  const clearBtn    = document.getElementById('searchTabClear');
+  const resultsList = document.getElementById('searchTabResults');
+  if (!input || !resultsList) return;
+
+  /* Reset input state */
+  input.value = '';
+  if (clearBtn) clearBtn.hidden = true;
+  resultsList.hidden = true;
+  resultsList.innerHTML = '';
+
+  let searchTimer = null;
+
+  input.oninput = () => {
+    const q = input.value.trim();
+    if (clearBtn) clearBtn.hidden = !q;
+    clearTimeout(searchTimer);
+    if (q.length < 2) { resultsList.hidden = true; return; }
+    searchTimer = setTimeout(async () => {
+      try {
+        const results = await searchCities(q);
+        if (!results.length) {
+          resultsList.innerHTML = `<li class="search-tab-list-item search-tab-list-empty">No results found</li>`;
+          resultsList.hidden = false;
+          return;
+        }
+        const cities = results.slice(0, 6);
+        resultsList.innerHTML = cities.map((r, i) => `
+          <li class="search-tab-list-item" data-index="${i}">
+            <div class="search-tab-list-text">
+              <span class="search-tab-list-name">${r.name}</span>
+              <span class="search-tab-list-sub">${[r.admin1, r.country].filter(Boolean).join(', ')}</span>
+            </div>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+          </li>
+        `).join('');
+        resultsList.hidden = false;
+        resultsList.querySelectorAll('.search-tab-list-item').forEach((item, i) => {
+          item.addEventListener('click', () => {
+            const r = cities[i];
+            if (r) {
+              saveRecent(r);
+              document.querySelector('[data-tab="home"]')?.click();
+              loadWeather(r.latitude, r.longitude, r.timezone || 'auto', r.name, r.country);
+            }
+          });
+        });
+      } catch { /* silent */ }
+    }, 320);
+  };
+
+  if (clearBtn) {
+    clearBtn.onclick = () => {
+      input.value = '';
+      clearBtn.hidden = true;
+      resultsList.hidden = true;
+      input.focus();
+    };
+  }
+
+  /* Auto-focus when tab opens */
+  setTimeout(() => input.focus(), 120);
 }
 
 /* =========================================================

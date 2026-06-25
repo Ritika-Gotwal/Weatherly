@@ -92,9 +92,9 @@
           <img src="assets/icons/nav-home.svg" alt="" class="header-nav-icon" aria-hidden="true" />
           <span>Home</span>
         </button>
-        <button class="header-nav-item" data-tab="map" aria-label="Map">
-          <img src="assets/icons/nav-map.svg" alt="" class="header-nav-icon" aria-hidden="true" />
-          <span>Map</span>
+        <button class="header-nav-item" data-tab="search" aria-label="Search">
+          <img src="assets/icons/nav-search.svg" alt="" class="header-nav-icon" aria-hidden="true" />
+          <span>Search</span>
         </button>
         <button class="header-nav-item" data-tab="favorites" aria-label="Favorites">
           <img src="assets/icons/nav-heart.svg" alt="" class="header-nav-icon" aria-hidden="true" />
@@ -400,22 +400,42 @@
 
       </div><!-- /#weatherContent -->
 
-      <!-- MAP VIEW (mobile tab) -->
-      <div id="mapView" class="tab-view" hidden>
+      <!-- SEARCH VIEW (replaces Map tab) -->
+      <div id="searchView" class="tab-view" hidden>
         <div class="tab-view-header">
           <button class="tab-back-btn" aria-label="Back to home">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
-          <h2 class="tab-view-title">Weather Map</h2>
+          <h2 class="tab-view-title">Explore Cities</h2>
         </div>
-        <div class="map-area">
-          <div class="map-placeholder-card">
-            <svg class="map-placeholder-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M32 6C21 6 12 15 12 26C12 40 32 58 32 58C32 58 52 40 52 26C52 15 43 6 32 6Z" stroke="#90caf9" stroke-width="2.5" fill="none"/>
-              <circle cx="32" cy="26" r="7" stroke="#90caf9" stroke-width="2.5" fill="none"/>
-            </svg>
-            <p class="map-placeholder-label" id="mapCityLabel">Search for a city to see its location</p>
-            <a class="map-open-btn" id="mapOpenBtn" href="#" target="_blank" rel="noopener">Open in Maps</a>
+        <div class="search-tab-body">
+          <!-- Search input -->
+          <div class="search-tab-field">
+            <img src="assets/icons/search.svg" alt="" class="search-tab-field-icon" aria-hidden="true" />
+            <input type="search" id="searchTabInput" class="search-tab-input" placeholder="Search for a city..." autocomplete="off" aria-label="Search for a city" />
+            <button id="searchTabClear" class="search-tab-clear" hidden aria-label="Clear search">✕</button>
+          </div>
+          <!-- Live results -->
+          <ul id="searchTabResults" class="search-tab-results" hidden aria-live="polite"></ul>
+          <!-- Recent searches (header row lives inside the list rendered by JS) -->
+          <div id="searchTabRecents" class="search-tab-section" hidden>
+            <ul id="searchTabRecentList" class="search-tab-list"></ul>
+          </div>
+          <!-- Popular cities -->
+          <div class="search-tab-section">
+            <h3 class="search-tab-section-title--light">Popular Cities</h3>
+            <div class="search-tab-chips">
+              <button class="search-tab-chip" data-city="New York">New York</button>
+              <button class="search-tab-chip" data-city="London">London</button>
+              <button class="search-tab-chip" data-city="Tokyo">Tokyo</button>
+              <button class="search-tab-chip" data-city="Paris">Paris</button>
+              <button class="search-tab-chip" data-city="Dubai">Dubai</button>
+              <button class="search-tab-chip" data-city="Sydney">Sydney</button>
+              <button class="search-tab-chip" data-city="Mumbai">Mumbai</button>
+              <button class="search-tab-chip" data-city="Singapore">Singapore</button>
+              <button class="search-tab-chip" data-city="Toronto">Toronto</button>
+              <button class="search-tab-chip" data-city="Berlin">Berlin</button>
+            </div>
           </div>
         </div>
       </div>
@@ -484,9 +504,9 @@
 
   <!-- ===== MOBILE BOTTOM NAV ===== -->
   <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
-    <button class="mobile-nav-item" data-tab="map" aria-label="Map">
-      <img src="assets/icons/nav-map.svg" alt="" class="mobile-nav-icon" aria-hidden="true" />
-      <span class="mobile-nav-label">Map</span>
+    <button class="mobile-nav-item" data-tab="search" aria-label="Search">
+      <img src="assets/icons/nav-search.svg" alt="" class="mobile-nav-icon" aria-hidden="true" />
+      <span class="mobile-nav-label">Search</span>
     </button>
     <button class="mobile-nav-item active" data-tab="home" aria-label="Home" aria-current="page">
       <img src="assets/icons/nav-home.svg" alt="" class="mobile-nav-icon" aria-hidden="true" />
