@@ -246,6 +246,7 @@ body {
 
   .logo {
     gap: 0;
+    margin-left: 0.5rem;
   }
   .logo-icon { display: block; width: 26px; height: 26px; }
   .logo-text { display: none; }
