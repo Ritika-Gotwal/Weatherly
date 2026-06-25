@@ -1097,13 +1097,18 @@
 /* =========================================================
    EMPTY STATE
    ========================================================= */
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: var(--space-16) var(--space-6);
+  padding: var(--space-12) var(--space-6) var(--space-10);
   gap: var(--space-4);
   min-height: 60vh;
 }
@@ -1111,13 +1116,16 @@
 .empty-state-icon img {
   width: 120px;
   height: 120px;
-  opacity: 0.55;
+  opacity: 0.85;
+  animation: floatIcon 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.18));
 }
 
 .empty-state-title {
   font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-regular);
-  color: rgba(255, 255, 255, 0.92);
+  font-weight: var(--font-weight-semibold);
+  /* Mobile: dark navy on light periwinkle; desktop overridden below */
+  color: rgba(6, 14, 50, 0.90);
   letter-spacing: -0.01em;
   margin: 0;
 }
@@ -1125,7 +1133,7 @@
 @media (max-width: 767px) {
   .empty-state-title {
     font-size: 1.375rem;
-    font-weight: var(--font-weight-regular);
+    font-weight: var(--font-weight-semibold);
   }
   .empty-state-text {
     font-size: var(--font-size-sm);
@@ -1136,10 +1144,143 @@
 .empty-state-text {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-regular);
-  color: rgba(255, 255, 255, 0.62);
+  /* Mobile: muted dark on light periwinkle; desktop overridden below */
+  color: rgba(6, 14, 50, 0.52);
   max-width: 300px;
   margin: 0;
   line-height: var(--line-height-normal);
+}
+
+/* Primary location CTA button — dark navy on light periwinkle mobile bg */
+.empty-state-location-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: rgba(6, 14, 50, 0.82);
+  border: 1.5px solid rgba(6, 14, 50, 0.10);
+  border-radius: var(--radius-full);
+  color: #ffffff;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  padding: 0.75rem 1.8rem;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-spring),
+              box-shadow var(--transition-fast);
+  margin-top: var(--space-2);
+  box-shadow: 0 4px 18px rgba(6, 14, 50, 0.22);
+}
+
+.empty-state-location-btn:hover {
+  background: rgba(6, 14, 50, 0.94);
+  box-shadow: 0 6px 24px rgba(6, 14, 50, 0.32);
+  transform: translateY(-2px);
+}
+
+.empty-state-location-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(6, 14, 50, 0.18);
+}
+
+.empty-location-icon {
+  width: 18px;
+  height: 18px;
+  filter: brightness(10);
+  flex-shrink: 0;
+}
+
+/* "or try a city" divider */
+.empty-state-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 280px;
+  margin-top: var(--space-2);
+}
+
+.empty-state-divider-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(6, 14, 50, 0.15);
+}
+
+.empty-state-divider-text {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: rgba(6, 14, 50, 0.38);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+/* Popular city chips */
+.empty-state-cities {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  max-width: 300px;
+}
+
+.empty-city-chip {
+  background: rgba(6, 14, 50, 0.08);
+  border: 1.5px solid rgba(6, 14, 50, 0.20);
+  border-radius: var(--radius-full);
+  color: rgba(6, 14, 50, 0.75);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  padding: 0.38rem 1.05rem;
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast),
+              color var(--transition-fast), transform var(--transition-spring);
+}
+
+.empty-city-chip:hover {
+  background: rgba(6, 14, 50, 0.16);
+  border-color: rgba(6, 14, 50, 0.40);
+  color: rgba(6, 14, 50, 0.92);
+  transform: translateY(-2px);
+}
+
+.empty-city-chip:active {
+  transform: translateY(0);
+}
+
+/* On desktop (dark bg) — flip the empty state interactive elements back to white */
+@media (min-width: 768px) {
+  .empty-state-title {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  .empty-state-text {
+    color: rgba(255, 255, 255, 0.60);
+  }
+  .empty-state-location-btn {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.28);
+    box-shadow: none;
+  }
+  .empty-state-location-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+    box-shadow: none;
+  }
+  .empty-state-divider-line {
+    background: rgba(255, 255, 255, 0.16);
+  }
+  .empty-state-divider-text {
+    color: rgba(255, 255, 255, 0.38);
+  }
+  .empty-city-chip {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .empty-city-chip:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.36);
+    color: #ffffff;
+  }
 }
 
 /* =========================================================

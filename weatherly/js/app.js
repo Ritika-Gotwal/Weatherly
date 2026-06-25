@@ -23,6 +23,7 @@ function init() {
   initSearch();
   initErrorClose();
   initLocationButton();
+  initEmptyStateActions();
   initMobileNav();
   initHeroFavBtn();
   initHourlyDragScroll();
@@ -44,6 +45,39 @@ function init() {
   }
 
   showEmpty();
+}
+
+/* =========================================================
+   Empty state: location button + city chips
+   ========================================================= */
+function initEmptyStateActions() {
+  /* "Use My Location" button inside the empty state */
+  const emptyLocBtn = document.getElementById('emptyLocationBtn');
+  if (emptyLocBtn) {
+    emptyLocBtn.addEventListener('click', async () => {
+      emptyLocBtn.disabled = true;
+      emptyLocBtn.textContent = 'Locating…';
+      try {
+        const { lat, lon } = await getCurrentPosition();
+        const place = await reverseGeocode(lat, lon);
+        await loadWeather(lat, lon, place.timezone, place.name, place.country);
+        saveRecent({ name: place.name, country: place.country, admin1: null,
+          latitude: lat, longitude: lon, timezone: place.timezone });
+      } catch (err) {
+        showError(typeof err === 'string' ? err : 'Unable to retrieve your location.');
+        emptyLocBtn.disabled = false;
+        emptyLocBtn.innerHTML = `<img src="assets/icons/location-pin.svg" alt="" class="empty-location-icon" aria-hidden="true" /> Use My Location`;
+      }
+    });
+  }
+
+  /* Popular city chips */
+  document.querySelectorAll('.empty-city-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const city = chip.dataset.city;
+      if (city) loadByQuery(city);
+    });
+  });
 }
 
 /* =========================================================

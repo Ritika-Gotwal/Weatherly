@@ -113,7 +113,30 @@
           <img src="assets/icons/partly-cloudy-day.svg" alt="Weather illustration" />
         </div>
         <h2 class="empty-state-title">Welcome to Weatherly</h2>
-        <p class="empty-state-text">Search for a city or use your current location to see the weather.</p>
+        <p class="empty-state-text">Get real-time weather for any city in the world.</p>
+
+        <!-- Primary CTA: use current location -->
+        <button class="empty-state-location-btn" id="emptyLocationBtn" type="button" aria-label="Use my current location">
+          <img src="assets/icons/location-pin.svg" alt="" class="empty-location-icon" aria-hidden="true" />
+          Use My Location
+        </button>
+
+        <!-- Divider -->
+        <div class="empty-state-divider" aria-hidden="true">
+          <span class="empty-state-divider-line"></span>
+          <span class="empty-state-divider-text">or try a city</span>
+          <span class="empty-state-divider-line"></span>
+        </div>
+
+        <!-- Popular city quick-picks -->
+        <div class="empty-state-cities" role="list" aria-label="Popular cities">
+          <button class="empty-city-chip" data-city="London" role="listitem" type="button">London</button>
+          <button class="empty-city-chip" data-city="New York" role="listitem" type="button">New York</button>
+          <button class="empty-city-chip" data-city="Tokyo" role="listitem" type="button">Tokyo</button>
+          <button class="empty-city-chip" data-city="Paris" role="listitem" type="button">Paris</button>
+          <button class="empty-city-chip" data-city="Sydney" role="listitem" type="button">Sydney</button>
+          <button class="empty-city-chip" data-city="Dubai" role="listitem" type="button">Dubai</button>
+        </div>
       </section>
 
       <!-- ERROR STATE -->
