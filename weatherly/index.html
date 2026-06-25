@@ -205,7 +205,7 @@
             </div>
 
             <div class="hero-illustration" aria-hidden="true">
-              <img src="" alt="" class="hero-weather-icon" id="heroWeatherIcon" />
+              <div class="hero-weather-anim" id="heroWeatherIcon" aria-hidden="true"></div>
             </div>
 
           </div>
@@ -218,7 +218,49 @@
           </button>
         </section>
 
-        <!-- 2. WEATHER HIGHLIGHTS -->
+        <!-- 2. AIR QUALITY -->
+        <section class="bottom-card air-quality-card" aria-label="Air quality">
+          <h2 class="card-title">Air Quality</h2>
+          <div class="aqi-body">
+            <div class="aqi-gauge-wrap">
+              <svg class="aqi-gauge" viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="aqi-track" cx="60" cy="60" r="50" />
+                <circle class="aqi-fill" id="aqiFill" cx="60" cy="60" r="50" />
+              </svg>
+              <div class="aqi-number-wrap">
+                <span class="aqi-number" id="aqiNumber">—</span>
+              </div>
+            </div>
+            <div class="aqi-info">
+              <span class="aqi-category" id="aqiCategory">—</span>
+              <p class="aqi-description" id="aqiDescription">—</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. HOURLY FORECAST -->
+        <section class="forecast-card hourly-section" aria-label="Hourly forecast">
+          <div class="card-header">
+            <h2 class="card-title">Hourly Forecast</h2>
+          </div>
+          <div class="hourly-scroll-wrapper">
+            <ul class="hourly-list" id="hourlyList" role="list">
+              <!-- Populated by ui.js -->
+            </ul>
+          </div>
+        </section>
+
+        <!-- 3. 7-DAY FORECAST -->
+        <section class="forecast-card daily-section" aria-label="7-day forecast">
+          <div class="card-header">
+            <h2 class="card-title">7-Day Forecast</h2>
+          </div>
+          <ul class="daily-list" id="dailyList" role="list">
+            <!-- Populated by ui.js -->
+          </ul>
+        </section>
+
+        <!-- 4. WEATHER HIGHLIGHTS -->
         <section class="highlights-section" aria-label="Weather highlights">
           <ul class="highlights-grid" id="highlightsGrid">
 
@@ -289,50 +331,8 @@
           </ul>
         </section>
 
-        <!-- 3. HOURLY FORECAST -->
-        <section class="forecast-card hourly-section" aria-label="Hourly forecast">
-          <div class="card-header">
-            <h2 class="card-title">Hourly Forecast</h2>
-          </div>
-          <div class="hourly-scroll-wrapper">
-            <ul class="hourly-list" id="hourlyList" role="list">
-              <!-- Populated by ui.js -->
-            </ul>
-          </div>
-        </section>
-
-        <!-- 4. 7-DAY FORECAST -->
-        <section class="forecast-card daily-section" aria-label="7-day forecast">
-          <div class="card-header">
-            <h2 class="card-title">7-Day Forecast</h2>
-          </div>
-          <ul class="daily-list" id="dailyList" role="list">
-            <!-- Populated by ui.js -->
-          </ul>
-        </section>
-
-        <!-- 5. BOTTOM ROW: Air Quality + Sunrise/Sunset + Details -->
+        <!-- 5. BOTTOM ROW: Sunrise/Sunset + Details -->
         <div class="bottom-row" aria-label="Additional weather details">
-
-          <!-- Air Quality -->
-          <section class="bottom-card air-quality-card" aria-label="Air quality">
-            <h2 class="card-title">Air Quality</h2>
-            <div class="aqi-body">
-              <div class="aqi-gauge-wrap">
-                <svg class="aqi-gauge" viewBox="0 0 120 120" aria-hidden="true">
-                  <circle class="aqi-track" cx="60" cy="60" r="50" />
-                  <circle class="aqi-fill" id="aqiFill" cx="60" cy="60" r="50" />
-                </svg>
-                <div class="aqi-number-wrap">
-                  <span class="aqi-number" id="aqiNumber">—</span>
-                </div>
-              </div>
-              <div class="aqi-info">
-                <span class="aqi-category" id="aqiCategory">—</span>
-                <p class="aqi-description" id="aqiDescription">—</p>
-              </div>
-            </div>
-          </section>
 
           <!-- Sunrise & Sunset -->
           <section class="bottom-card sunrise-card" aria-label="Sunrise and sunset">

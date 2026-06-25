@@ -52,11 +52,187 @@ function renderHero(current) {
   document.getElementById('heroHigh').textContent = `↑ ${current.high}°`;
   document.getElementById('heroLow').textContent  = `↓ ${current.low}°`;
 
-  const iconEl = document.getElementById('heroWeatherIcon');
-  iconEl.src = current.iconPath;
-  iconEl.alt = current.condition;
-
+  const iconName = current.iconPath.replace('assets/icons/', '').replace('.svg', '');
+  renderWeatherAnimation(iconName);
   applyHeroBg(current.iconPath);
+}
+
+/* =========================================================
+   WEATHER ANIMATIONS — inline animated SVG for hero
+   ========================================================= */
+function renderWeatherAnimation(iconName) {
+  const el = document.getElementById('heroWeatherIcon');
+  if (!el) return;
+  const map = {
+    'clear-day':           waClearDay,
+    'clear-night':         waClearNight,
+    'partly-cloudy-day':   waPartlyCloudyDay,
+    'partly-cloudy-night': waPartlyCloudyNight,
+    'cloudy':              waCloudy,
+    'fog':                 waFog,
+    'drizzle':             waDrizzle,
+    'rain':                waRain,
+    'snow':                waSnow,
+    'thunderstorm':        waThunderstorm,
+  };
+  el.innerHTML = (map[iconName] || waCloudy)();
+}
+
+/* ---- Cloud path helper (centered in 160×160 viewbox) ---- */
+function _cloud(cx, cy, opacity = 0.93) {
+  const o = `rgba(255,255,255,${opacity})`;
+  return `
+    <circle cx="${cx-22}" cy="${cy+8}"  r="18" fill="${o}"/>
+    <circle cx="${cx}"    cy="${cy}"    r="26" fill="${o}"/>
+    <circle cx="${cx+24}" cy="${cy+6}"  r="19" fill="${o}"/>
+    <rect   x="${cx-40}"  y="${cy+6}"  width="83" height="22" rx="2" fill="${o}"/>`;
+}
+
+function _rainDrops(xs, y0, color, count, cls) {
+  return xs.slice(0, count).map((x, i) =>
+    `<line class="wa-drop wa-d${i+1}" x1="${x}" y1="${y0}" x2="${x-5}" y2="${y0+20}" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>`
+  ).join('');
+}
+
+/* ---- Clear Day ---- */
+function waClearDay() {
+  return `<svg viewBox="0 0 160 160" class="wa-svg" xmlns="http://www.w3.org/2000/svg">
+    <circle class="wa-glow" cx="80" cy="80" r="56" fill="rgba(255,213,50,0.22)"/>
+    <g class="wa-rays">
+      <line x1="80" y1="20" x2="80" y2="36"   stroke="#FFD740" stroke-width="5" stroke-linecap="round"/>
+      <line x1="80" y1="124" x2="80" y2="140"  stroke="#FFD740" stroke-width="5" stroke-linecap="round"/>
+      <line x1="20" y1="80" x2="36" y2="80"    stroke="#FFD740" stroke-width="5" stroke-linecap="round"/>
+      <line x1="124" y1="80" x2="140" y2="80"  stroke="#FFD740" stroke-width="5" stroke-linecap="round"/>
+      <line x1="38"  y1="38"  x2="50"  y2="50"  stroke="#FFD740" stroke-width="5" stroke-linecap="round"/>
+      <line x1="122" y1="38"  x2="110" y2="50"  stroke="#FFD740" stroke-width="5" stroke-linecap="round"/>
+      <line x1="38"  y1="122" x2="50"  y2="110" stroke="#FFD740" stroke-width="5" stroke-linecap="round"/>
+      <line x1="122" y1="122" x2="110" y2="110" stroke="#FFD740" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <circle cx="80" cy="80" r="30" fill="#FFD740"/>
+    <circle cx="80" cy="80" r="20" fill="#FFF176" opacity="0.6"/>
+  </svg>`;
+}
+
+/* ---- Clear Night ---- */
+function waClearNight() {
+  /* Crescent: white moon circle + dark offset circle overlay (same technique as waPartlyCloudyNight).
+     Both circles grouped under .wa-moon so they float together, preserving the crescent shape. */
+  return `<svg viewBox="0 0 160 160" class="wa-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle class="wa-star wa-s1" cx="28"  cy="32"  r="2.5" fill="white"/>
+    <circle class="wa-star wa-s2" cx="122" cy="22"  r="2"   fill="white"/>
+    <circle class="wa-star wa-s3" cx="145" cy="58"  r="1.5" fill="white"/>
+    <circle class="wa-star wa-s4" cx="18"  cy="92"  r="2"   fill="white"/>
+    <circle class="wa-star wa-s5" cx="138" cy="118" r="1.5" fill="white"/>
+    <circle class="wa-star wa-s6" cx="48"  cy="144" r="2"   fill="white"/>
+    <circle class="wa-star wa-s7" cx="148" cy="140" r="1.5" fill="white"/>
+    <!-- Moon circle + dark offset shadow = clear crescent shape -->
+    <g class="wa-moon">
+      <circle cx="80" cy="80" r="38" fill="#E8EAF6"/>
+      <circle cx="98" cy="64" r="32" fill="#070D20"/>
+    </g>
+  </svg>`;
+}
+
+/* ---- Partly Cloudy Day ---- */
+function waPartlyCloudyDay() {
+  return `<svg viewBox="0 0 160 160" class="wa-svg" xmlns="http://www.w3.org/2000/svg">
+    <g class="wa-sun-behind">
+      <circle cx="66" cy="68" r="26" fill="#FFD740"/>
+      <circle cx="66" cy="68" r="18" fill="#FFF176" opacity="0.6"/>
+      <line x1="66" y1="28" x2="66" y2="40"   stroke="#FFD740" stroke-width="4" stroke-linecap="round"/>
+      <line x1="66" y1="96" x2="66" y2="108"  stroke="#FFD740" stroke-width="4" stroke-linecap="round"/>
+      <line x1="26" y1="68" x2="38" y2="68"   stroke="#FFD740" stroke-width="4" stroke-linecap="round"/>
+      <line x1="94" y1="68" x2="106" y2="68"  stroke="#FFD740" stroke-width="4" stroke-linecap="round"/>
+      <line x1="37" y1="39" x2="46" y2="48"   stroke="#FFD740" stroke-width="4" stroke-linecap="round"/>
+      <line x1="95" y1="39" x2="86" y2="48"   stroke="#FFD740" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <g class="wa-cloud">${_cloud(82, 92)}</g>
+  </svg>`;
+}
+
+/* ---- Partly Cloudy Night ---- */
+function waPartlyCloudyNight() {
+  return `<svg viewBox="0 0 160 160" class="wa-svg" xmlns="http://www.w3.org/2000/svg">
+    <circle class="wa-star wa-s1" cx="30"  cy="26" r="2"   fill="white"/>
+    <circle class="wa-star wa-s3" cx="132" cy="44" r="1.5" fill="white"/>
+    <circle class="wa-star wa-s5" cx="148" cy="72" r="1.8" fill="white"/>
+    <circle class="wa-moon-behind" cx="66" cy="62" r="28" fill="#E8EAF6"/>
+    <circle cx="84" cy="48" r="22" fill="rgba(15,20,45,0.82)"/>
+    <g class="wa-cloud">${_cloud(82, 96)}</g>
+  </svg>`;
+}
+
+/* ---- Cloudy ---- */
+function waCloudy() {
+  return `<svg viewBox="0 0 160 160" class="wa-svg" xmlns="http://www.w3.org/2000/svg">
+    <g class="wa-cloud-back" style="opacity:0.55">
+      ${_cloud(96, 68, 0.80)}
+    </g>
+    <g class="wa-cloud">${_cloud(72, 96)}</g>
+  </svg>`;
+}
+
+/* ---- Fog ---- */
+function waFog() {
+  return `<svg viewBox="0 0 160 160" class="wa-svg" xmlns="http://www.w3.org/2000/svg">
+    <rect class="wa-fog-bar wa-fb1" x="8"  y="46" width="134" height="11" rx="5.5" fill="rgba(255,255,255,0.80)"/>
+    <rect class="wa-fog-bar wa-fb2" x="18" y="68" width="120" height="11" rx="5.5" fill="rgba(255,255,255,0.68)"/>
+    <rect class="wa-fog-bar wa-fb3" x="8"  y="90" width="134" height="11" rx="5.5" fill="rgba(255,255,255,0.56)"/>
+    <rect class="wa-fog-bar wa-fb4" x="26" y="112" width="104" height="11" rx="5.5" fill="rgba(255,255,255,0.40)"/>
+  </svg>`;
+}
+
+/* ---- Drizzle ---- */
+function waDrizzle() {
+  return `<svg viewBox="0 0 160 160" class="wa-svg" xmlns="http://www.w3.org/2000/svg">
+    <g class="wa-cloud">${_cloud(76, 68)}</g>
+    ${_rainDrops([48,68,88,108], 94, '#90caf9', 4, 'wa-d')}
+  </svg>`;
+}
+
+/* ---- Rain ---- */
+function waRain() {
+  return `<svg viewBox="0 0 160 160" class="wa-svg" xmlns="http://www.w3.org/2000/svg">
+    <g class="wa-cloud">${_cloud(76, 62, 0.85)}</g>
+    <line class="wa-drop wa-d1" x1="42"  y1="88" x2="36"  y2="110" stroke="#64b5f6" stroke-width="2.5" stroke-linecap="round"/>
+    <line class="wa-drop wa-d2" x1="60"  y1="88" x2="54"  y2="110" stroke="#64b5f6" stroke-width="2.5" stroke-linecap="round"/>
+    <line class="wa-drop wa-d3" x1="78"  y1="88" x2="72"  y2="110" stroke="#64b5f6" stroke-width="2.5" stroke-linecap="round"/>
+    <line class="wa-drop wa-d4" x1="96"  y1="88" x2="90"  y2="110" stroke="#64b5f6" stroke-width="2.5" stroke-linecap="round"/>
+    <line class="wa-drop wa-d5" x1="114" y1="88" x2="108" y2="110" stroke="#64b5f6" stroke-width="2.5" stroke-linecap="round"/>
+    <line class="wa-drop wa-d6" x1="51"  y1="114" x2="45" y2="136" stroke="#64b5f6" stroke-width="2.5" stroke-linecap="round"/>
+    <line class="wa-drop wa-d7" x1="87"  y1="114" x2="81" y2="136" stroke="#64b5f6" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>`;
+}
+
+/* ---- Snow ---- */
+function waSnow() {
+  const flake = (cx, cy, cls) => `
+    <g class="wa-flake ${cls}" style="transform-origin:${cx}px ${cy}px">
+      <line x1="${cx}" y1="${cy-8}" x2="${cx}" y2="${cy+8}" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="${cx-8}" y1="${cy}" x2="${cx+8}" y2="${cy}" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="${cx-6}" y1="${cy-6}" x2="${cx+6}" y2="${cy+6}" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="${cx+6}" y1="${cy-6}" x2="${cx-6}" y2="${cy+6}" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+    </g>`;
+  return `<svg viewBox="0 0 160 160" class="wa-svg" xmlns="http://www.w3.org/2000/svg">
+    <g class="wa-cloud">${_cloud(76, 58, 0.88)}</g>
+    ${flake(44,  96, 'wa-sf1')}
+    ${flake(76,  110, 'wa-sf2')}
+    ${flake(108, 96, 'wa-sf3')}
+    ${flake(58,  130, 'wa-sf4')}
+    ${flake(96,  130, 'wa-sf5')}
+  </svg>`;
+}
+
+/* ---- Thunderstorm ---- */
+function waThunderstorm() {
+  return `<svg viewBox="0 0 160 160" class="wa-svg" xmlns="http://www.w3.org/2000/svg">
+    <g class="wa-cloud">${_cloud(76, 54, 0.75)}</g>
+    <polygon class="wa-bolt"
+      points="88,78 72,106 82,106 68,138 102,100 88,100 100,78"
+      fill="#FFD740"/>
+    <line class="wa-drop wa-d1" x1="36"  y1="84" x2="30"  y2="104" stroke="#64b5f6" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+    <line class="wa-drop wa-d3" x1="120" y1="84" x2="114" y2="104" stroke="#64b5f6" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+  </svg>`;
 }
 
 /* Apply a dynamic sky gradient to the hero based on weather icon */

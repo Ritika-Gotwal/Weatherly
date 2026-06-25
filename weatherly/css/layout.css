@@ -14,26 +14,27 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* Mobile: muted periwinkle — premium twilight feel with dark navy cards */
-  background: linear-gradient(160deg, #bccde8 0%, #c5d3eb 55%, #bfcfe9 100%);
+  /* Mobile: soft airy sky */
+  background: linear-gradient(180deg, #C8E4FF 0%, #D8EEFF 40%, #C4DEFF 100%);
   background-attachment: fixed;
   color: var(--color-text-primary);
   font-family: var(--font-family);
-  padding-top: var(--header-height);
+  padding-top: 0;
   padding-bottom: var(--mobile-nav-height);
 }
 
 @media (min-width: 768px) {
   body {
-    /* Desktop: very dark navy — reference shows ~#080e1e dark */
+    /* Desktop: soft deep teal-slate — warm dark, not harsh */
     background: linear-gradient(160deg,
-      #040912 0%,
-      #080e1e 30%,
-      #0c1430 55%,
-      #080e1e 80%,
-      #040912 100%
+      #16213E 0%,
+      #1B2A48 35%,
+      #1F3154 60%,
+      #1B2A48 85%,
+      #16213E 100%
     );
     background-attachment: fixed;
+    padding-top: var(--header-height);
     padding-bottom: 0;
   }
 }
@@ -49,6 +50,22 @@ body {
   gap: var(--section-gap);
 }
 
+@media (max-width: 767px) {
+  /* Remove top padding — hero card starts at very top of screen */
+  .container {
+    padding-top: 0;
+  }
+
+  /* Hero breaks out of container gutters + slides up behind sticky search bar */
+  .hero-section {
+    margin-left:  calc(-1 * var(--container-padding));
+    margin-right: calc(-1 * var(--container-padding));
+    margin-top:   -68px;   /* search bar: 12px pad + 44px input + 12px pad */
+    border-radius: 0 !important;
+    min-height: 448px;     /* 380 + 68 to compensate for the upward extension */
+  }
+}
+
 /* ----- HEADER ----- */
 .app-header {
   position: fixed;
@@ -56,11 +73,11 @@ body {
   left: 0;
   right: 0;
   height: var(--header-height);
-  background-color: var(--color-header-bg);   /* transparent on mobile, dark on desktop */
-  border-bottom: none;
+  background-color: var(--color-header-bg);
+  border-bottom: 1px solid var(--color-header-border);
   z-index: var(--z-header);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
 
 .header-inner {
@@ -153,12 +170,14 @@ body {
   .header-nav-icon {
     width: 15px;
     height: 15px;
+    /* #8fa7c4 icons — darken to white-ish for dark desktop header */
     filter: brightness(10);
     opacity: 0.55;
   }
 
   .header-nav-item.active .header-nav-icon,
   .header-nav-item:hover .header-nav-icon {
+    filter: brightness(10);
     opacity: 1;
   }
 }
@@ -196,7 +215,8 @@ body {
 .location-icon {
   width: 16px;
   height: 16px;
-  opacity: 0.75;
+  opacity: 0.65;
+  /* White on dark desktop header; mobile nav is hidden so no conflict */
   filter: brightness(10);
   transition: opacity var(--transition-fast);
 }
@@ -227,7 +247,7 @@ body {
 .hamburger-icon {
   width: 22px;
   height: 22px;
-  filter: brightness(10);   /* SVG uses #8fa7c4 — brightness(10) clamps it to white */
+  filter: brightness(10);
 }
 
 /* Mobile centred title — hidden by default, shown on mobile */
@@ -243,14 +263,9 @@ body {
   cursor: pointer;
 }
 
-/* ---- Mobile header: hamburger | Weatherly (centered) | pin ---- */
-/* Must come AFTER the base display:none rules so the override wins */
+/* ---- Mobile: hide header entirely ---- */
 @media (max-width: 767px) {
-  .header-inner {
-    gap: 0;
-    justify-content: space-between;
-    position: relative;
-  }
+  .app-header { display: none; }
 
   .search-wrapper { display: none; }
   .location-text  { display: none; }
@@ -266,7 +281,7 @@ body {
   .header-title-mobile { display: block; }
 }
 
-/* Mobile search bar — below header, above content */
+/* Mobile search bar — sticky below header, above hero */
 .mobile-search-bar {
   display: none;
 }
@@ -275,11 +290,13 @@ body {
   .mobile-search-bar {
     display: block;
     position: sticky;
-    top: var(--header-height);
+    top: 0;
     z-index: calc(var(--z-header) - 1);
-    background: transparent;
+    background: rgba(196, 222, 255, 0.78);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.55);
     padding: var(--space-3) var(--container-padding);
-    border-bottom: none;
   }
 
   .mobile-search-inner {
@@ -290,15 +307,42 @@ body {
     width: 100%;
   }
 
+  /* Light-glass pill on frosted blue bar */
   .mobile-search-bar .search-input {
     width: 100%;
     height: 44px;
-    background: var(--color-header-bg);
+    background: rgba(255, 255, 255, 0.60);
+    border: 1px solid rgba(255, 255, 255, 0.80);
     border-radius: var(--radius-full);
+    color: var(--color-text-primary);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .mobile-search-bar .search-input::placeholder {
+    color: var(--color-text-muted);
   }
 
   .mobile-search-bar .search-input:focus {
-    background: var(--color-header-bg);
+    background: rgba(255, 255, 255, 0.80);
+    border-color: rgba(59, 130, 246, 0.40);
+  }
+
+  /* Dark icon on light bar */
+  .mobile-search-bar .search-icon {
+    filter: brightness(0.35);
+    opacity: 0.65;
+  }
+
+  /* Clear button: dark on light */
+  .mobile-search-bar .search-clear-btn {
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--color-text-secondary);
+  }
+
+  .mobile-search-bar .search-clear-btn:hover {
+    background: rgba(0, 0, 0, 0.12);
+    color: var(--color-text-primary);
   }
 }
 
@@ -394,7 +438,10 @@ body {
   left: 0;
   right: 0;
   height: var(--mobile-nav-height);
-  background-color: var(--color-nav-bg);
+  background-color: transparent;
+  border-top: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   z-index: var(--z-mobile-nav);
 }
 
@@ -411,15 +458,21 @@ body {
   gap: 4px;
   background: none;
   border: none;
-  color: var(--color-nav-inactive);
+  color: #64748B;
   cursor: pointer;
   padding: var(--space-1) var(--space-2);
   transition: color var(--transition-fast);
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 .mobile-nav-item.active {
-  color: var(--color-nav-active);
+  color: #1E293B;
+}
+
+.mobile-nav-item.active .mobile-nav-label {
+  font-weight: var(--font-weight-semibold);
 }
 
 .mobile-nav-item:focus-visible {
@@ -430,13 +483,13 @@ body {
 .mobile-nav-icon {
   width: 22px;
   height: 22px;
-  opacity: 0.65;
-  filter: brightness(10);
+  filter: brightness(0.30);
+  opacity: 0.55;
 }
 
 .mobile-nav-item.active .mobile-nav-icon {
-  opacity: 1;
-  filter: brightness(10);   /* stays white — active state shown by label color */
+  filter: brightness(0.15);
+  opacity: 0.85;
 }
 
 .mobile-nav-label {
@@ -465,15 +518,16 @@ body {
 }
 
 @media (max-width: 767px) {
-  /* Card container — same dark navy as header, slightly transparent */
+  /* Card container — frosted glass on sky bg */
   .highlights-section {
-    background: rgba(6, 14, 50, 0.65);
+    background: rgba(255, 255, 255, 0.48);
+    border: 1px solid rgba(255, 255, 255, 0.72);
     border-radius: var(--radius-xl);
     padding: var(--space-3) 0 var(--space-3) var(--space-4);
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
     box-shadow: var(--shadow-card);
   }
 
@@ -506,17 +560,21 @@ body {
 /* Forecast cards (Hourly + Daily) */
 .forecast-card {
   background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: var(--card-padding);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   box-shadow: var(--shadow-card);
 }
 
-/* Mobile: dark navy cards to match header — readable on light bg */
+/* Mobile: frosted glass on sky bg */
 @media (max-width: 767px) {
   .forecast-card {
-    background: var(--color-header-bg);
+    background: rgba(255, 255, 255, 0.48);
+    border-color: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
   }
 }
 
@@ -537,16 +595,20 @@ body {
 
 .bottom-card {
   background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: var(--card-padding);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   box-shadow: var(--shadow-card);
 }
 
-/* Mobile: bottom-row cards match forecast-card — dark navy on light bg */
+/* Mobile: frosted glass on sky bg */
 @media (max-width: 767px) {
   .bottom-card {
-    background: var(--color-header-bg);
+    background: rgba(255, 255, 255, 0.48);
+    border-color: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
   }
 }

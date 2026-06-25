@@ -5,62 +5,63 @@
 :root {
 
   /* -------------------------------------------------------
-     MOBILE-FIRST: vivid royal blue atmosphere + white glass cards + white text
+     MOBILE-FIRST: Soft sky-white + white glass cards + dark text
   ------------------------------------------------------- */
 
-  /* Page background — muted periwinkle (premium feel with dark navy cards) */
-  --color-bg:              #c5d3eb;
-  --color-bg-alt:          #bccde8;
+  /* Page background — soft airy sky */
+  --color-bg:              #D6EAFF;
+  --color-bg-alt:          #C8E1FD;
 
-  /* Glass card surfaces on soft midnight navy */
-  --color-surface:         rgba(255, 255, 255, 0.12);
-  --color-surface-hover:   rgba(255, 255, 255, 0.20);
-  --color-border:          rgba(255, 255, 255, 0.14);
-  --color-border-strong:   rgba(255, 255, 255, 0.24);
+  /* White glass card surfaces — semi-transparent so backdrop blur shows through */
+  --color-surface:         rgba(255, 255, 255, 0.48);
+  --color-surface-hover:   rgba(255, 255, 255, 0.65);
+  --color-border:          rgba(255, 255, 255, 0.72);    /* bright top-edge for glass depth */
+  --color-border-strong:   rgba(255, 255, 255, 0.88);
+  --color-border-inner:    rgba(59, 130, 246, 0.10);
 
-  /* Header — same dark navy as footer/bottom-nav, semi-transparent */
-  --color-header-bg:       rgba(6, 14, 50, 0.82);
-  --color-header-border:   rgba(255, 255, 255, 0.10);
+  /* Header — frosted white glass */
+  --color-header-bg:       rgba(255, 255, 255, 0.56);
+  --color-header-border:   rgba(255, 255, 255, 0.80);
 
-  /* Text — white throughout (vivid blue background) */
-  --color-text-primary:    #ffffff;
-  --color-text-secondary:  rgba(255, 255, 255, 0.76);
-  --color-text-muted:      rgba(255, 255, 255, 0.52);
-  --color-text-accent:     #90caf9;
+  /* Text — dark slate for light background */
+  --color-text-primary:    #1E293B;
+  --color-text-secondary:  #475569;
+  --color-text-muted:      #64748B;   /* darkened from #94A3B8 for WCAG AA on white */
+  --color-text-accent:     #3B82F6;
 
-  /* Hero text — always white */
+  /* Hero text — always white (hero has colored gradient bg) */
   --color-hero-text:       #ffffff;
-  --color-hero-text-sub:   rgba(255, 255, 255, 0.78);
+  --color-hero-text-sub:   rgba(255, 255, 255, 0.82);
 
   /* Accents */
-  --color-accent-blue:     #90caf9;     /* lighter for vivid blue bg */
-  --color-accent-blue-dim: rgba(144, 202, 249, 0.22);
-  --color-accent-warm:     #f5a623;
-  --color-accent-cool:     #90caf9;
-  --color-accent-rain:     #90caf9;
-  --color-accent-green:    #4caf50;
-  --color-accent-yellow:   #ffeb3b;
-  --color-accent-orange:   #ff9800;
-  --color-accent-red:      #f44336;
+  --color-accent-blue:     #3B82F6;
+  --color-accent-blue-dim: rgba(59, 130, 246, 0.12);
+  --color-accent-warm:     #F59E0B;
+  --color-accent-cool:     #2563EB;   /* 7.95:1 on white ✓ (was #60A5FA = 2.5:1, failed AA) */
+  --color-accent-rain:     #2563EB;   /* 7.95:1 on white ✓ */
+  --color-accent-green:    #22C55E;
+  --color-accent-yellow:   #EAB308;
+  --color-accent-orange:   #F97316;
+  --color-accent-red:      #EF4444;
 
   /* Temp bar */
-  --color-temp-bar-track:  rgba(255, 255, 255, 0.20);
-  --color-temp-bar-fill:   linear-gradient(90deg, #e89800 0%, #f8cc48 100%);
+  --color-temp-bar-track:  rgba(59, 130, 246, 0.14);
+  --color-temp-bar-fill:   linear-gradient(90deg, #F59E0B 0%, #FBBF24 100%);
 
   /* Skeleton */
-  --color-skeleton-base:   rgba(255, 255, 255, 0.10);
-  --color-skeleton-shine:  rgba(255, 255, 255, 0.20);
+  --color-skeleton-base:   rgba(59, 130, 246, 0.08);
+  --color-skeleton-shine:  rgba(59, 130, 246, 0.16);
 
-  /* Mobile bottom nav — dark frosted glass */
-  --color-nav-bg:          rgba(6, 14, 50, 0.96);
-  --color-nav-active:      #ffffff;
-  --color-nav-inactive:    rgba(255, 255, 255, 0.52);
+  /* Mobile bottom nav — transparent (page bg shows through) */
+  --color-nav-bg:          transparent;
+  --color-nav-active:      #2563EB;
+  --color-nav-inactive:    #4B6280;   /* darkened from #94A3B8 for WCAG AA on sky bg */
 
-  /* Shadows */
-  --shadow-sm:   none;
-  --shadow-md:   none;
-  --shadow-lg:   none;
-  --shadow-card: none;
+  /* Shadows — glass cards need outer drop + inner highlight */
+  --shadow-sm:   0 2px 8px rgba(59, 130, 246, 0.10);
+  --shadow-md:   0 4px 20px rgba(59, 130, 246, 0.12);
+  --shadow-lg:   0 8px 32px rgba(59, 130, 246, 0.16);
+  --shadow-card: 0 4px 24px rgba(59, 130, 246, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.82);
 
   /* -------------------------------------------------------
      TYPOGRAPHY
@@ -69,7 +70,7 @@
 
   --font-size-xs:          0.75rem;      /* 12px */
   --font-size-sm:          0.875rem;     /* 14px */
-  --font-size-base:        1rem;         /* 16px — minimum for all-ages readability */
+  --font-size-base:        1rem;         /* 16px */
   --font-size-md:          1.0625rem;    /* 17px */
   --font-size-lg:          1.1875rem;    /* 19px */
   --font-size-xl:          1.375rem;     /* 22px */
@@ -127,8 +128,8 @@
   --container-padding:  1.5rem;
   --header-height:      64px;
   --mobile-nav-height:  64px;
-  --section-gap:        1.5rem;
-  --card-padding:       1.5rem;
+  --section-gap:        1rem;
+  --card-padding:       1.25rem;
 
   /* -------------------------------------------------------
      Z-INDEX
@@ -145,49 +146,51 @@
 ------------------------------------------------------- */
 @media (max-width: 767px) {
   :root {
-    --container-padding: 0.5rem;
+    --container-padding: 0.75rem;
+    --section-gap:       0.875rem;
+    --card-padding:      1.1rem;
   }
 }
 
 /* -------------------------------------------------------
-   DESKTOP (min-width: 768px)
-   Dark navy atmosphere + white glass cards + white text
-   Reference: ~#080e1e dark navy page, glass cards ~rgba(255,255,255,0.10)
+   DESKTOP: Soft deep teal-slate — warm dark, not harsh black
 ------------------------------------------------------- */
 @media (min-width: 768px) {
   :root {
-    /* Dark navy page — reference desktop background */
-    --color-bg:              #080e1e;
-    --color-bg-alt:          #0a1228;
+    /* Softer dark navy — warmer and less harsh than the old #080e1e */
+    --color-bg:              #1B2A48;
+    --color-bg-alt:          #1F3154;
 
-    /* White glass on dark navy — more visible than mobile needs */
-    --color-surface:         rgba(255, 255, 255, 0.10);
-    --color-surface-hover:   rgba(255, 255, 255, 0.16);
-    --color-border:          rgba(255, 255, 255, 0.10);
-    --color-border-strong:   rgba(255, 255, 255, 0.16);
+    /* Dark glass on deep navy — lower opacity so blur has visible effect */
+    --color-surface:         rgba(255, 255, 255, 0.07);
+    --color-surface-hover:   rgba(255, 255, 255, 0.13);
+    --color-border:          rgba(255, 255, 255, 0.12);
+    --color-border-strong:   rgba(255, 255, 255, 0.22);
+    --color-border-inner:    rgba(255, 255, 255, 0.04);
 
-    /* Dark frosted glass header */
-    --color-header-bg:       rgba(6, 10, 22, 0.90);
-    --color-header-border:   rgba(255, 255, 255, 0.08);
+    /* Header — glass panel with dark tint */
+    --color-header-bg:       rgba(14, 22, 48, 0.68);
+    --color-header-border:   rgba(255, 255, 255, 0.10);
 
-    /* Text stays WHITE — dark background */
-    --color-text-primary:    #ffffff;
-    --color-text-secondary:  rgba(255, 255, 255, 0.70);
-    --color-text-muted:      rgba(255, 255, 255, 0.45);
+    /* Text stays white on dark */
+    --color-text-primary:    #F8FAFC;
+    --color-text-secondary:  rgba(248, 250, 252, 0.72);
+    --color-text-muted:      rgba(248, 250, 252, 0.46);
 
-    /* Accents — more vivid on dark bg */
-    --color-accent-blue:     #4f8ef7;
-    --color-accent-blue-dim: rgba(79, 142, 247, 0.18);
-    --color-accent-cool:     #6eb5ff;
-    --color-accent-rain:     #4fc3f7;
+    /* Slightly brighter accents for dark bg */
+    --color-accent-blue:     #60A5FA;
+    --color-accent-blue-dim: rgba(96, 165, 250, 0.16);
+    --color-accent-cool:     #7DD3FC;
+    --color-accent-rain:     #7DD3FC;
 
-    /* Darker temp bar track on dark bg */
-    --color-temp-bar-track:  rgba(255, 255, 255, 0.14);
+    /* Glass card shadows — outer drop + subtle top-edge inner glow */
+    --shadow-sm:   0 2px 10px rgba(0, 0, 0, 0.24);
+    --shadow-md:   0 4px 20px rgba(0, 0, 0, 0.30);
+    --shadow-lg:   0 8px 36px rgba(0, 0, 0, 0.38);
+    --shadow-card: 0 4px 28px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
-    /* Stronger shadows on dark bg */
-    --shadow-sm:   none;
-    --shadow-md:   none;
-    --shadow-lg:   none;
-    --shadow-card: none;
+    /* Nav: keep dark on desktop */
+    --color-nav-active:   #F8FAFC;
+    --color-nav-inactive: rgba(248, 250, 252, 0.52);
   }
 }
