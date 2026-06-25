@@ -24,6 +24,7 @@ function init() {
   initErrorClose();
   initLocationButton();
   initMobileNav();
+  initHeroFavBtn();
   initHourlyDragScroll();
   initHourlyWheelScroll();
 
@@ -56,6 +57,8 @@ function initLocationButton() {
       /* Reverse-geocode for display name */
       const place = await reverseGeocode(lat, lon);
       await loadWeather(lat, lon, place.timezone, place.name, place.country);
+      saveRecent({ name: place.name, country: place.country, admin1: null,
+        latitude: lat, longitude: lon, timezone: place.timezone });
     } catch (err) {
       showError(typeof err === 'string' ? err : 'Unable to retrieve your location.');
     } finally {
@@ -71,6 +74,7 @@ function initMobileNav() {
   /* Single handler covers both .mobile-nav-item and .header-nav-item */
   document.querySelectorAll('.mobile-nav-item, .header-nav-item').forEach((btn) => {
     btn.addEventListener('click', () => {
+      playNavClick();
       const tab = btn.dataset.tab;
       /* Sync active state across ALL nav items (mobile + desktop) */
       document.querySelectorAll('.mobile-nav-item, .header-nav-item').forEach(b => {
@@ -84,6 +88,7 @@ function initMobileNav() {
   /* Back buttons inside tab views → navigate to home */
   document.querySelectorAll('.tab-back-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      playBack();
       document.querySelector('[data-tab="home"]')?.click();
     });
   });
@@ -144,9 +149,13 @@ function switchTab(tab) {
       if (favoritesView) {
         favoritesView.hidden = false;
         renderFavoritesList();
-        /* Show save button only if a city is loaded */
+        /* Show save button only if a city is loaded AND not already saved */
         const saveBtn = document.getElementById('favSaveBtn');
-        if (saveBtn) saveBtn.hidden = !state.city;
+        if (saveBtn) {
+          const key = state.city ? `${state.city.name}||${state.city.country}` : null;
+          const alreadySaved = key && getFavorites().some(f => f.key === key);
+          saveBtn.hidden = !state.city || alreadySaved;
+        }
         const cityNameEl = document.getElementById('favSaveCityName');
         if (cityNameEl && state.city) cityNameEl.textContent = state.city.name;
       }
@@ -221,6 +230,39 @@ function updateMapView() {
 }
 
 /* =========================================================
+   Hero favorite heart button
+   ========================================================= */
+function initHeroFavBtn() {
+  const btn = document.getElementById('heroFavBtn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    if (!state.city) return;
+    const favs = getFavorites();
+    const key = `${state.city.name}||${state.city.country}`;
+    const idx = favs.findIndex(f => f.key === key);
+    if (idx === -1) {
+      playFavAdd();
+      favs.push({ key, name: state.city.name, country: state.city.country,
+        lat: state.city.lat, lon: state.city.lon, timezone: state.city.timezone });
+    } else {
+      playFavRemove();
+      favs.splice(idx, 1);
+    }
+    localStorage.setItem('weatherly_favs', JSON.stringify(favs));
+    updateHeroFavBtn();
+  });
+}
+
+function updateHeroFavBtn() {
+  const btn = document.getElementById('heroFavBtn');
+  if (!btn || !state.city) return;
+  const key = `${state.city.name}||${state.city.country}`;
+  const saved = getFavorites().some(f => f.key === key);
+  btn.classList.toggle('is-saved', saved);
+  btn.setAttribute('aria-label', saved ? 'Remove from favorites' : 'Add to favorites');
+}
+
+/* =========================================================
    Load weather by raw text query (fallback when no autocomplete selection)
    ========================================================= */
 async function loadByQuery(query) {
@@ -233,6 +275,7 @@ async function loadByQuery(query) {
       return;
     }
     const city = results[0];
+    saveRecent(city);
     await loadWeather(city.latitude, city.longitude, city.timezone ?? 'auto', city.name, city.country);
   } catch (err) {
     showEmpty();
@@ -277,6 +320,11 @@ async function loadWeather(lat, lon, timezone, cityName, countryName) {
     state.weather    = data;
     state.airQuality = rawAQI;
     state.city = { name: cityName, country: countryName, lat, lon, timezone };
+
+    /* Show and sync the hero heart button */
+    const heroFavBtn = document.getElementById('heroFavBtn');
+    if (heroFavBtn) heroFavBtn.hidden = false;
+    updateHeroFavBtn();
 
     showWeather();
 

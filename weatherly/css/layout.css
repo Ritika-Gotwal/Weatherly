@@ -14,8 +14,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* Mobile: uniform vivid royal blue — no dark extremes */
-  background: #1535c4;
+  /* Mobile: muted periwinkle — premium twilight feel with dark navy cards */
+  background: linear-gradient(160deg, #bccde8 0%, #c5d3eb 55%, #bfcfe9 100%);
   background-attachment: fixed;
   color: var(--color-text-primary);
   font-family: var(--font-family);
@@ -281,9 +281,12 @@ body {
   .mobile-search-bar .search-input {
     width: 100%;
     height: 44px;
-    /* Dark navy pill — matches reference mobile search bar */
-    background: rgba(8, 18, 58, 0.60);
+    background: var(--color-header-bg);
     border-radius: var(--radius-full);
+  }
+
+  .mobile-search-bar .search-input:focus {
+    background: var(--color-header-bg);
   }
 }
 
@@ -450,9 +453,9 @@ body {
 }
 
 @media (max-width: 767px) {
-  /* Card container — matches forecast-card style, signals section is self-contained */
+  /* Card container — same dark navy as header, slightly transparent */
   .highlights-section {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgba(6, 14, 50, 0.65);
     border-radius: var(--radius-xl);
     padding: var(--space-3) 0 var(--space-3) var(--space-4);
     position: relative;
@@ -498,10 +501,10 @@ body {
   box-shadow: var(--shadow-card);
 }
 
-/* Mobile: higher opacity forecast cards to read on vivid blue */
+/* Mobile: dark navy cards to match header — readable on light bg */
 @media (max-width: 767px) {
   .forecast-card {
-    background: rgba(255, 255, 255, 0.26);
+    background: var(--color-header-bg);
   }
 }
 
@@ -529,9 +532,9 @@ body {
   box-shadow: var(--shadow-card);
 }
 
-/* Mobile: bottom-row cards match forecast-card style */
+/* Mobile: bottom-row cards match forecast-card — dark navy on light bg */
 @media (max-width: 767px) {
   .bottom-card {
-    background: rgba(255, 255, 255, 0.26);
+    background: var(--color-header-bg);
   }
 }

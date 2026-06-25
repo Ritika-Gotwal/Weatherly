@@ -173,6 +173,7 @@ function initSearchInstance({ formId, inputId, listId, clearBtnId, outerSel }) {
     if (clearBtn) clearBtn.hidden = false;
     closeDropdown();
     saveRecent(city);
+    playCitySelect();
 
     window.app.loadWeather(
       city.latitude,
@@ -221,6 +222,7 @@ function initSearchInstance({ formId, inputId, listId, clearBtnId, outerSel }) {
 
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
+      playTick();
       input.value = '';
       clearBtn.hidden = true;
       input.focus();

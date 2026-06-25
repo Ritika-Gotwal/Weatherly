@@ -8,15 +8,15 @@
      MOBILE-FIRST: vivid royal blue atmosphere + white glass cards + white text
   ------------------------------------------------------- */
 
-  /* Page background — vivid rich blue (reference: ~#1535c4 royal blue) */
-  --color-bg:              #1535c4;
-  --color-bg-alt:          #1225a8;
+  /* Page background — muted periwinkle (premium feel with dark navy cards) */
+  --color-bg:              #c5d3eb;
+  --color-bg-alt:          #bccde8;
 
-  /* Glass card surfaces on vivid blue */
-  --color-surface:         rgba(255, 255, 255, 0.14);
-  --color-surface-hover:   rgba(255, 255, 255, 0.22);
-  --color-border:          rgba(255, 255, 255, 0.16);
-  --color-border-strong:   rgba(255, 255, 255, 0.26);
+  /* Glass card surfaces on soft midnight navy */
+  --color-surface:         rgba(255, 255, 255, 0.12);
+  --color-surface-hover:   rgba(255, 255, 255, 0.20);
+  --color-border:          rgba(255, 255, 255, 0.14);
+  --color-border-strong:   rgba(255, 255, 255, 0.24);
 
   /* Header — same dark navy as footer/bottom-nav, semi-transparent */
   --color-header-bg:       rgba(6, 14, 50, 0.82);
@@ -138,6 +138,15 @@
   --z-header:       200;
   --z-mobile-nav:   200;
   --z-toast:        300;
+}
+
+/* -------------------------------------------------------
+   MOBILE: tighter horizontal padding
+------------------------------------------------------- */
+@media (max-width: 767px) {
+  :root {
+    --container-padding: 0.5rem;
+  }
 }
 
 /* -------------------------------------------------------
