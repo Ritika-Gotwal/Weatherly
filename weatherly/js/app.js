@@ -43,11 +43,12 @@ function init() {
   initLocationButton();
   initEmptyStateActions();
   initMobileNav();
+  initHeroMenu();
   initHeroFavBtn();
   initHourlyDragScroll();
   initHourlyWheelScroll();
 
-  /* Default tab is home — hide mobile search bar on start */
+  /* Hide mobile search bar on all tabs */
   const mobileSearch = document.querySelector('.mobile-search-bar');
   if (mobileSearch) mobileSearch.hidden = true;
 
@@ -145,15 +146,16 @@ function initLocationButton() {
    Nav tab switching — shared between mobile bottom nav and desktop header nav
    ========================================================= */
 function initMobileNav() {
-  /* Single handler covers both .mobile-nav-item and .header-nav-item */
-  document.querySelectorAll('.mobile-nav-item, .header-nav-item').forEach((btn) => {
+  /* Desktop header nav items */
+  document.querySelectorAll('.header-nav-item').forEach((btn) => {
     btn.addEventListener('click', () => {
       playNavClick();
       const tab = btn.dataset.tab;
-      /* Sync active state across ALL nav items (mobile + desktop) */
-      document.querySelectorAll('.mobile-nav-item, .header-nav-item').forEach(b => {
+      document.querySelectorAll('.header-nav-item, .hero-nav-option').forEach(b => {
         b.classList.toggle('active', b.dataset.tab === tab);
-        b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false');
+        if (b.getAttribute('aria-current') !== null) {
+          b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false');
+        }
       });
       switchTab(tab);
     });
@@ -163,7 +165,11 @@ function initMobileNav() {
   document.querySelectorAll('.tab-back-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       playBack();
-      document.querySelector('[data-tab="home"]')?.click();
+      /* Sync hero menu active state to home */
+      document.querySelectorAll('.hero-nav-option, .header-nav-item').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === 'home');
+      });
+      switchTab('home');
     });
   });
 
@@ -427,6 +433,60 @@ function renderSearchTab() {
 
   /* Auto-focus when tab opens */
   setTimeout(() => input.focus(), 120);
+}
+
+/* =========================================================
+   Hero three-dots nav menu (mobile)
+   ========================================================= */
+function initHeroMenu() {
+  const btn  = document.getElementById('heroMenuBtn');
+  const menu = document.getElementById('heroNavMenu');
+  if (!btn || !menu) return;
+
+  /* Toggle menu open/close */
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = !menu.hidden;
+    menu.hidden = isOpen;
+    btn.setAttribute('aria-expanded', String(!isOpen));
+
+    if (!isOpen) {
+      /* Position menu below the button */
+      const rect = btn.getBoundingClientRect();
+      menu.style.top  = `${rect.bottom + 8}px`;
+      menu.style.right = `${window.innerWidth - rect.right}px`;
+      menu.style.left  = 'auto';
+    }
+  });
+
+  /* Close when clicking outside */
+  document.addEventListener('click', () => {
+    if (!menu.hidden) {
+      menu.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  menu.addEventListener('click', (e) => e.stopPropagation());
+
+  /* Wire each option */
+  menu.querySelectorAll('.hero-nav-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      menu.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+      const tab = opt.dataset.tab;
+
+      /* Sync active state on all menu options + header nav items */
+      document.querySelectorAll('.hero-nav-option, .header-nav-item').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === tab);
+        if (b.getAttribute('aria-current') !== null) {
+          b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false');
+        }
+      });
+
+      switchTab(tab);
+    });
+  });
 }
 
 /* =========================================================

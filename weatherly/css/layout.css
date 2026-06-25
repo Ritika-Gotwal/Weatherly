@@ -20,7 +20,7 @@ body {
   color: var(--color-text-primary);
   font-family: var(--font-family);
   padding-top: 0;
-  padding-bottom: var(--mobile-nav-height);
+  padding-bottom: var(--space-8);
 }
 
 @media (min-width: 768px) {
@@ -441,26 +441,125 @@ body {
   font-size: var(--font-size-sm);
 }
 
-/* ----- MOBILE BOTTOM NAV ----- */
+/* ----- MOBILE BOTTOM NAV — hidden, replaced by hero three-dots menu ----- */
 .mobile-nav {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: var(--mobile-nav-height);
-  background-color: transparent;
-  border-top: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: none;
-  z-index: var(--z-mobile-nav);
+  display: none;
 }
 
+/* ----- HERO THREE-DOTS BUTTON (mobile only) ----- */
+.hero-menu-btn {
+  display: none;
+}
 
-@media (min-width: 768px) {
-  .mobile-nav { display: none; }
+@media (max-width: 767px) {
+  .hero-menu-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 3;
+    -webkit-tap-highlight-color: transparent;
+    transition: background var(--transition-fast);
+  }
+
+  .hero-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  .hero-menu-dot {
+    width: 3.5px;
+    height: 3.5px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: block;
+    flex-shrink: 0;
+  }
+}
+
+/* ----- FLOATING NAV MENU ----- */
+.hero-nav-menu {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .hero-nav-menu {
+    display: block;
+    position: fixed;
+    top: 56px;     /* positioned by JS on open; this is the fallback */
+    right: var(--container-padding);
+    background: rgba(10, 20, 52, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    min-width: 168px;
+    z-index: calc(var(--z-header) + 10);
+    overflow: hidden;
+    animation: menu-pop 0.18s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    transform-origin: top right;
+  }
+
+  .hero-nav-menu[hidden] { display: none; }
+
+  @keyframes menu-pop {
+    from { opacity: 0; transform: scale(0.88); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .hero-nav-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    padding: 12px var(--space-4);
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    color: rgba(255, 255, 255, 0.72);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    text-align: left;
+    transition: background var(--transition-fast), color var(--transition-fast);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .hero-nav-option:last-child { border-bottom: none; }
+
+  .hero-nav-option:hover,
+  .hero-nav-option:active {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+  }
+
+  .hero-nav-option.active {
+    color: #ffffff;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .hero-nav-option.active .hero-nav-opt-icon {
+    opacity: 1;
+  }
+
+  .hero-nav-opt-icon {
+    width: 18px;
+    height: 18px;
+    filter: brightness(10);
+    opacity: 0.65;
+    flex-shrink: 0;
+  }
 }
 
 .mobile-nav-item {

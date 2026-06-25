@@ -210,13 +210,36 @@
 
           </div>
 
-          <!-- Favorite heart — top-right corner of hero card -->
+          <!-- Three-dots nav button — top-right (mobile only) -->
+          <button class="hero-menu-btn" id="heroMenuBtn" aria-label="Open navigation" aria-expanded="false">
+            <span class="hero-menu-dot"></span>
+            <span class="hero-menu-dot"></span>
+            <span class="hero-menu-dot"></span>
+          </button>
+
+          <!-- Favorite heart — bottom-right corner of hero card -->
           <button class="hero-fav-btn" id="heroFavBtn" aria-label="Add to favorites" hidden>
             <svg class="hero-fav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
             </svg>
           </button>
         </section>
+
+        <!-- Floating nav menu (fixed so it's not clipped by hero overflow:hidden) -->
+        <div class="hero-nav-menu" id="heroNavMenu" hidden role="menu">
+          <button class="hero-nav-option" data-tab="search" role="menuitem">
+            <img src="assets/icons/nav-search.svg" class="hero-nav-opt-icon" aria-hidden="true" />
+            <span>Search</span>
+          </button>
+          <button class="hero-nav-option active" data-tab="home" role="menuitem">
+            <img src="assets/icons/nav-home.svg" class="hero-nav-opt-icon" aria-hidden="true" />
+            <span>Home</span>
+          </button>
+          <button class="hero-nav-option" data-tab="favorites" role="menuitem">
+            <img src="assets/icons/nav-heart.svg" class="hero-nav-opt-icon" aria-hidden="true" />
+            <span>Favorites</span>
+          </button>
+        </div>
 
         <!-- 2. AIR QUALITY -->
         <section class="bottom-card air-quality-card" aria-label="Air quality">
