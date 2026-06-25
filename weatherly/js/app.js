@@ -44,7 +44,30 @@ function init() {
     } catch { /* ignore corrupt cache */ }
   }
 
-  showEmpty();
+  /* Auto-detect location on first load */
+  autoLoadLocation();
+}
+
+/* =========================================================
+   Auto-load location on first open (no cache, no interaction required)
+   ========================================================= */
+async function autoLoadLocation() {
+  if (!navigator.geolocation) {
+    showEmpty();
+    return;
+  }
+
+  showSkeleton();
+
+  try {
+    const { lat, lon } = await getCurrentPosition();
+    const place = await reverseGeocode(lat, lon);
+    await loadWeather(lat, lon, place.timezone, place.name, place.country);
+    saveRecent({ name: place.name, country: place.country, admin1: null,
+      latitude: lat, longitude: lon, timezone: place.timezone });
+  } catch {
+    showEmpty();
+  }
 }
 
 /* =========================================================
